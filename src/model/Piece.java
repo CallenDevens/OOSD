@@ -1,15 +1,13 @@
 package model;
 
-public class Piece {
+public class Piece extends SquareComponent{
 	private static int idCounter = 0;
 	private int id;
 	private int attack;
 	private int healthPoint;
 	private int agility;
 	
-	private int x;
-	private int y;
-	
+	private boolean movable = false;
 	private PieceClass pclass;
 
 	public Piece(PieceClass pclass, int atk,int health, int agility){
@@ -39,5 +37,19 @@ public class Piece {
 	public void moveTo(int x, int y){
 		this.x = x;
 		this.y = y;
+	}
+
+	public boolean isMovable() {
+		// TODO Auto-generated method stub
+		return this.movable;
+	}
+
+	public void setPieceMovable() {
+		this.movable = true;
+		
+	}
+
+	public void setPieceUnmovable() {
+		this.movable = false;
 	}
 }

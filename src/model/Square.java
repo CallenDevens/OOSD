@@ -5,7 +5,7 @@ public class Square {
 	private int posY;
 	
 	private int color;
-	private Piece pieceholder;
+	private SquareComponent pieceholder;
 	
 	public Square(int x, int y){
 		this.posX = x;
@@ -25,8 +25,8 @@ public class Square {
 		if(pieceholder== null){
 			System.out.print("n	");
 		}
-		else{
-			System.out.print(pieceholder.getPieceClass()+" ");
+		else if (pieceholder.getClass().equals(Piece.class)){
+			System.out.print(((Piece)pieceholder).getPieceClass()+" ");
 		}
 	}
 	
@@ -37,5 +37,17 @@ public class Square {
 	
 	public void setPieceOnSquare(Piece p){
 		this.pieceholder = p;
+	}
+	
+	public boolean isSquareOccupied(){
+		return this.pieceholder!=null;
+	}
+	
+	public SquareComponent getSquareComponent(){
+		return this.pieceholder;
+	}
+	
+	public SquareComponent getPiece(){
+		return this.pieceholder;
 	}
 }

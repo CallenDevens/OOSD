@@ -10,6 +10,11 @@ public class Board {
 	private Square[][] squares;
 	private static Map<String, ArrayList<Piece>> playerPieces;
 	
+	private static ArrayList<Piece> activePlayerPieces = null;
+
+	
+	private int turnCount = 0;
+	
 	public Board(){
 		size = 11;
 		squares = new Square[size][size];	
@@ -36,6 +41,9 @@ public class Board {
 
 	//P1 hunter warrior mage
 	//P2 rouge paladin prist
+	public Piece getPieceByXandY(int x, int y){
+		return (Piece) getSquare(x, y).getPiece();
+	}
 	
 	private void setPiece(int x,int y, Piece p){
 		Square s = this.getSquare(x,y);
@@ -48,7 +56,7 @@ public class Board {
 		}
 	}
 
-	private Square getSquare(int x, int y) {
+	public Square getSquare(int x, int y) {
 		return this.squares[x][y];
 	}
 
@@ -78,5 +86,39 @@ public class Board {
 			}
 
 		}
+	}
+
+	public boolean piecesOfOnePlayerAllRemoved() {
+		boolean removed = false;
+		for(ArrayList<Piece> pieceList : playerPieces.values()){
+			if(pieceList.isEmpty()){
+				removed = true;
+			}
+		}
+		return removed;
+	}
+
+	public void switchActivePieces() {
+		int playerID = (turnCount++)%2 +1;
+		String playerName = "p"+ playerID;
+		System.out.println(playerName);
+		
+		for(Map.Entry<String, ArrayList<Piece>> entry : playerPieces.entrySet()){
+			if(entry.getKey().equals(playerName)){
+				for(Piece p: entry.getValue()){
+					p.setPieceMovable();
+				}
+			}
+			else{
+				for(Piece p: entry.getValue()){
+					p.setPieceUnmovable();
+				}
+			}
+		}
+	}
+
+	public ArrayList<Piece> getActivePieces() {
+		// TODO Auto-generated method stub
+		return this.activePlayerPieces;
 	}
 }

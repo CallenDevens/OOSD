@@ -14,62 +14,38 @@ import model.Game;
 import model.Piece;
 
 public class GameGUI extends JFrame{
+	public static int squareSize = 60;
 	Game game = new Game();
 	Board board= Game.getBoard();
+	int size = Board.size;	
 	
-	int size = Board.size;
-	JLabel[][] grids = new JLabel[size][size];  
+	BoardPanel boardPanel = new BoardPanel(board);
 	
 	public GameGUI(){
-	   initBoard();
-	   initPieces();
-	   
+		board.getPieceByXandY(0, 1);
+		this.add(boardPanel);
 		this.setTitle("Game");  
 		this.setLocation(300, 200);  
-		this.setSize(600, 600);  
+		this.setSize(squareSize*size, squareSize* size);  
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		this.setVisible(true);
+		//TODO put the invoking code into a controller(Listener)
+		
+	    this.startGame();		
 	}  
-		      
-    private void initPieces(){
-    	ArrayList<Piece> pieces = board.getPieces();
-    	for(Piece p: pieces){
-    		int x = p.getPosX();
-    		int y = p.getPosY();
-    		grids[x][y].setText(p.getPieceClass());
-    		
-    	}
+
+
+
+	private void startGame() {
+		System.out.println("start Game");
+	    game.startOneTurn();	    
 	}
 
-	private void initBoard() {
-		 this.getContentPane().setLayout(new GridLayout(size,size));  
-		 int count = 0;  
-		 for(int i = 0; i < grids.length; i++) {  
-		      for(int j = 0; j < grids.length; j++) {  
 
-		    	  grids[i][j] = new JLabel();
-		          if(count % 2 == 0) {  
-		              grids[i][j].setBackground(Color.WHITE);  
-		          }
-		          else 
-		          {
-		              grids[i][j].setBackground(Color.BLACK);  
-		              grids[i][j].setForeground(Color.WHITE);  
-
-		          }  
-		          grids[i][j].setOpaque(true);
-		         // grids[i][j].setText(count+"");
-		          this.getContentPane().add(grids[i][j]);
-		          count++;
-		     }
-		      
-		      count = (size%2 == 0?count+1: count);
-		 }		
-	}
 
 	public static void main(String[] args) {  
 		GameGUI gameGUI  = new GameGUI();
   
-    } 
-	
+    }
 }
