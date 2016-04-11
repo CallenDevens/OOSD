@@ -23,7 +23,7 @@ public class Square {
 
 	public void display() {
 		if(pieceholder== null){
-			System.out.print("n	");
+			System.out.printf( "%-6s","n");
 		}
 		else if (pieceholder.getClass().equals(Piece.class)){
 			System.out.print(((Piece)pieceholder).getPieceClass()+" ");
@@ -35,19 +35,18 @@ public class Square {
 		this.pieceholder = null;
 	}
 	
-	public void setPieceOnSquare(Piece p){
-		this.pieceholder = p;
-	}
-	
 	public boolean isSquareOccupied(){
 		return this.pieceholder!=null;
 	}
 	
-	public SquareComponent getSquareComponent(){
-		return this.pieceholder;
+	public Piece getSquareComponent(){
+			return (Piece) this.pieceholder;			
 	}
 	
-	public SquareComponent getPiece(){
-		return this.pieceholder;
+	public Piece getPiece(){
+		if(pieceholder == null){
+			System.out.println("piece null! " + posX + "  " +posY);
+		}
+		return (Piece) this.pieceholder;
 	}
 }

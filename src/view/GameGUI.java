@@ -30,7 +30,6 @@ public class GameGUI extends JFrame{
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		this.setVisible(true);
-		//TODO put the invoking code into a controller(Listener)
 		
 	    this.startGame();		
 	}  
@@ -38,7 +37,7 @@ public class GameGUI extends JFrame{
 
 
 	private void startGame() {
-		System.out.println("start Game");
+		//System.out.println("start Game");
 	    game.startOneTurn();	    
 	}
 

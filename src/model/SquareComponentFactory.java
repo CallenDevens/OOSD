@@ -1,6 +1,6 @@
 package model;
 
-public class PieceFactory {
+public class SquareComponentFactory {
 	private static final int MAGE_ATTACK = 120;
 	private static final int MAGE_HEALTH_POINT = 200;
 	private static final int MAGE_AGI = 3;

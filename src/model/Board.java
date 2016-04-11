@@ -79,7 +79,7 @@ public class Board {
 		int j = 0;
 		for(int i = 0; i < p1Pieces.length; i++){
 			for(; j < num*(i+1); j++){
-				Piece p = PieceFactory.createPiece(p1Pieces[i]);
+				Piece p = SquareComponentFactory.createPiece(p1Pieces[i]);
 				this.setPiece(j+1, posY , p);
 				p.moveTo(j+1, posY);
 			    pieces.add(p);
@@ -100,6 +100,8 @@ public class Board {
 
 	public void switchActivePieces() {
 		int playerID = (turnCount++)%2 +1;
+//		String playerName = "p2";
+
 		String playerName = "p"+ playerID;
 		System.out.println(playerName);
 		
@@ -120,5 +122,12 @@ public class Board {
 	public ArrayList<Piece> getActivePieces() {
 		// TODO Auto-generated method stub
 		return this.activePlayerPieces;
+	}
+
+	public void movePieceFromTo(int pieceX, int pieceY, int x, int y) {
+		Piece p = this.getPieceByXandY(pieceX, pieceY);
+		p.moveTo(x, y);
+		this.getSquare(pieceX, pieceY).setSquareEmpty();
+		this.setPiece(x, y, p);
 	}
 }
