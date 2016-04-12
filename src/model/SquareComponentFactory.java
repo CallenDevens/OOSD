@@ -27,20 +27,20 @@ public class SquareComponentFactory {
 	private static final int HUNTER_AGI = 4;
 	
 
-	public static Piece createPiece(PieceClass pieceClass) {
+	public static Piece createPiece(PieceClass pieceClass, int posx, int posy) {
 		switch(pieceClass){
 		case MAGE:
-			return new Piece(pieceClass.MAGE,MAGE_ATTACK, MAGE_HEALTH_POINT, MAGE_AGI);
+			return new Piece(pieceClass.MAGE,MAGE_ATTACK, MAGE_HEALTH_POINT, MAGE_AGI, posx, posy);
 		case ROGUE:
-			return new Piece(pieceClass.ROGUE,ROGUE_ATTACK, ROGUE_HEALTH_POINT, ROGUE_AGI);			
+			return new Piece(pieceClass.ROGUE,ROGUE_ATTACK, ROGUE_HEALTH_POINT, ROGUE_AGI, posx, posy);			
 		case WARRIOR:
-			return new Piece(pieceClass.WARRIOR, WARRIOR_ATTACK, WARRIOR_HEALTH_POINT, WARRIOR_AGI);
+			return new Piece(pieceClass.WARRIOR, WARRIOR_ATTACK, WARRIOR_HEALTH_POINT, WARRIOR_AGI, posx, posy);
 		case PALADIN:
-			return new Piece(pieceClass.PALADIN, PALADIN_ATTACK, PALADIN_HEALTH_POINT, PALADIN_AGI);
+			return new Piece(pieceClass.PALADIN, PALADIN_ATTACK, PALADIN_HEALTH_POINT, PALADIN_AGI, posx, posy);
 		case PRISST:
-			return new Piece(pieceClass.PRISST, PRISST_ATTACK, PRISST_HEALTH_POINT, PRISST_AGI);
+			return new Piece(pieceClass.PRISST, PRISST_ATTACK, PRISST_HEALTH_POINT, PRISST_AGI, posx, posy);
 		case HUNTER:
-			return new Piece(pieceClass.HUNTER, HUNTER_ATTACK, HUNTER_HEALTH_POINT, HUNTER_AGI);
+			return new Piece(pieceClass.HUNTER, HUNTER_ATTACK, HUNTER_HEALTH_POINT, HUNTER_AGI, posx, posy);
 		default:
 			return null;
 		}

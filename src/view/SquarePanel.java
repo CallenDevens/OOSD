@@ -17,12 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class SquarePanel extends JPanel{
+
 	public final static int PIECE_NON_CHOSEN = 100;
 	public final static int PIECE_CHOSEN = 101;
 	public final static int EMPTY_SQUARE = 102;
 	public final static int MOVABLE_SQUARE = 103;
-
-
 	
     private JButton pieceButton;
     private int posX;
@@ -49,7 +48,6 @@ public class SquarePanel extends JPanel{
     }
 
 	public boolean isPiece() {
-		// TODO Auto-generated method stub
 		return pieceButton!=null;
 	}
 
@@ -64,6 +62,9 @@ public class SquarePanel extends JPanel{
 		
 		this.state = PIECE_NON_CHOSEN;
 		this.add(pieceButton);
+		
+		this.revalidate();
+		this.repaint();
 	}
 	
 	private ImageIcon resizeImage(ImageIcon oldImage){
@@ -108,7 +109,6 @@ public class SquarePanel extends JPanel{
 	
     public void setTransparent(float transparency) {  
         this.transparency = transparency;  
- //       System.out.println("trans " + transparency);
     }  
       
     @Override  

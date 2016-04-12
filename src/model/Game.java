@@ -16,14 +16,12 @@ public class Game {
 	}
 	
 	public void initializeGame(){
-		board = new Board();
+		board = Board.getInstance();
 		Player p1 = new Player("p1");
 		Player p2 = new Player("p2");
 		
 		board.setPieceforPlayer(p1.getPlayerName(),p1Pieces,0);
 		board.setPieceforPlayer(p2.getPlayerName(),p2Pieces,board.size-1);
-
-		//board.setPieceforPlayer2(p2);
 	}
 	public void testDisplay(){
 		board.display();

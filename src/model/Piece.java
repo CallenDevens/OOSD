@@ -2,9 +2,6 @@ package model;
 
 public class Piece extends SquareComponent{
 
-	private static int idCounter = 0;
-	private int id;
-	
 	private int attack;
 	private int healthPoint;
 	private int agility;
@@ -12,8 +9,9 @@ public class Piece extends SquareComponent{
 	private boolean movable = false;
 	private PieceClass pclass;
 
-	public Piece(PieceClass pclass, int atk,int health, int agility){
-		id = idCounter++;
+	public Piece(PieceClass pclass, int atk,int health, int agility, int posX, int posY){
+		super(posX, posY);
+		
 		this.pclass = pclass;
 		this.attack = atk;
 		this.healthPoint = health;
@@ -22,18 +20,6 @@ public class Piece extends SquareComponent{
 	
 	public String getPieceClass(){
 		return this.pclass.toString();
-	}
-	
-	public int getPieceID(){
-		return this.id;
-	}
-	
-	public int getPosX(){
-		return x;
-	}
-	
-	public int getPosY(){
-		return y;
 	}
 	
 	public void moveTo(int x, int y){
@@ -56,5 +42,13 @@ public class Piece extends SquareComponent{
 
 	public int getMovableDistance() {
 		return this.agility;
+	}
+	
+	public void getHurt(int damage){
+		this.healthPoint -=damage;
+	}
+	
+	public boolean isAlive(){
+		return this.healthPoint > 0;
 	}
 }
