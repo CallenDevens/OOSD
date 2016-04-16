@@ -25,6 +25,10 @@ public class BoardPanel extends JPanel{
 	public SquarePanel[][] grids ;  
 	public int size = -1;
 
+	/* activePiecePosX, activePiecePosY
+	 * coordinates of a piece that is chosen yet not moved by the player
+	 * if no piece is set active, assign -1 to them 
+	 * */
 	public int activePiecePosX = -1;
 	public int activePiecePosY = -1;
 	
@@ -32,6 +36,7 @@ public class BoardPanel extends JPanel{
 
     @Override
 	protected void paintComponent(Graphics g) {
+    	// load background image
 	     super.paintComponent(g);
 	     g.drawImage(imgBackground, 0,0, this);
 	}
@@ -72,6 +77,13 @@ public class BoardPanel extends JPanel{
 		
 	}
 
+	public void cancelHighlighted(){
+		for(int i = 0; i < grids.length; i++){
+			for(int j = 0; j < grids.length; j++){
+				this.grids[i][j].setTransparent(0);;
+			}
+		}
+	}
 
 	public boolean isMovableSquare(int i, int j) {
 		return grids[i][j].isMovable();
@@ -88,6 +100,7 @@ public class BoardPanel extends JPanel{
 		this.activePiecePosX = -1;
 		this.activePiecePosY = -1;
 		grids[x][y].setState(SquarePanel.PIECE_NON_CHOSEN);	
+		this.cancelHighlighted();
 	}
 
 	public void resetPieceMoveState() {

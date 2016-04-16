@@ -33,7 +33,6 @@ public class Piece extends SquareComponent{
 
 	public void setPieceMovable() {
 		this.movable = true;
-		
 	}
 
 	public void setPieceUnmovable() {

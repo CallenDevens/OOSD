@@ -1,22 +1,22 @@
 package model;
 
 public class SquareComponentFactory {
+	private Piece itsPiece;
 	private static final int MAGE_ATTACK = 120;
 	private static final int MAGE_HEALTH_POINT = 200;
 	private static final int MAGE_AGI = 3;
-	
+
 	private static final int ROGUE_ATTACK = 80;
 	private static final int ROGUE_HEALTH_POINT = 200;
 	private static final int ROGUE_AGI = 5;
-	
+
 	private static final int WARRIOR_ATTACK = 100;
 	private static final int WARRIOR_HEALTH_POINT = 250;
 	private static final int WARRIOR_AGI = 2;
-	
+
 	private static final int PALADIN_ATTACK = 110;
 	private static final int PALADIN_HEALTH_POINT = 240;
 	private static final int PALADIN_AGI = 2;
-
 
 	private static final int PRISST_ATTACK = 70;
 	private static final int PRISST_HEALTH_POINT = 440;
@@ -25,14 +25,13 @@ public class SquareComponentFactory {
 	private static final int HUNTER_ATTACK = 100;
 	private static final int HUNTER_HEALTH_POINT = 240;
 	private static final int HUNTER_AGI = 4;
-	
 
 	public static Piece createPiece(PieceClass pieceClass, int posx, int posy) {
-		switch(pieceClass){
+		switch (pieceClass) {
 		case MAGE:
-			return new Piece(pieceClass.MAGE,MAGE_ATTACK, MAGE_HEALTH_POINT, MAGE_AGI, posx, posy);
+			return new Piece(pieceClass.MAGE, MAGE_ATTACK, MAGE_HEALTH_POINT, MAGE_AGI, posx, posy);
 		case ROGUE:
-			return new Piece(pieceClass.ROGUE,ROGUE_ATTACK, ROGUE_HEALTH_POINT, ROGUE_AGI, posx, posy);			
+			return new Piece(pieceClass.ROGUE, ROGUE_ATTACK, ROGUE_HEALTH_POINT, ROGUE_AGI, posx, posy);
 		case WARRIOR:
 			return new Piece(pieceClass.WARRIOR, WARRIOR_ATTACK, WARRIOR_HEALTH_POINT, WARRIOR_AGI, posx, posy);
 		case PALADIN:

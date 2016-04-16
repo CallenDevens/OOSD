@@ -109,6 +109,7 @@ public class SquarePanel extends JPanel{
 	
     public void setTransparent(float transparency) {  
         this.transparency = transparency;  
+        this.repaint();
     }  
       
     @Override  

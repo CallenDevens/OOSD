@@ -1,3 +1,7 @@
+/* model class for game board
+ * implemented by Singleton design pattern
+ * */
+
 package model;
 
 import java.util.ArrayList;
@@ -7,14 +11,18 @@ import java.util.Map;
 public class Board {
 	private static Board board = null;
 	
+	//default piece number 
 	private final int num = 3;
 	public static int size;
 	private Square[][] squares;
+	
 	private static Map<String, ArrayList<Piece>> playerPieces;
 	private static ArrayList<Piece> activePlayerPieces = null;
 	
 	private int turnCount = 0;
 	
+	//use singleton pattern to initialize board instance
+	//for there is only one board in a game
 	public static Board getInstance(){
 		if (board == null){
 			board = new Board();

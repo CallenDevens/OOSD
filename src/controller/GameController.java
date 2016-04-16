@@ -9,6 +9,7 @@ import model.Board;
 import model.Game;
 import view.BoardPanel;
 import view.GameGUI;
+/* implements WindowsListner to launch initialization of MVC binds*/
 
 public class GameController implements WindowListener{
 
@@ -43,6 +44,10 @@ public class GameController implements WindowListener{
 		this.gameGUI.repaint();		
 		this.game.startOneTurn();
 		
+		/* call addBoardController here 
+		as board controller must be bound to model and view 
+		after GameController is stably connected to its M and V
+		*/
 		this.addBoardController();
 		
 	}

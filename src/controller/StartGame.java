@@ -1,5 +1,6 @@
 package controller;
 
+/* Entry of the application, bind game controller with view and model */
 import model.Board;
 import model.Game;
 import view.BoardPanel;
@@ -14,12 +15,13 @@ public class StartGame {
 		GameGUI view 	= new GameGUI();
 				
 		GameController gController = new GameController();
+		//assign model and view to game controller
 		gController.setGameModel(game);
 		gController.setView(view);
 		
 		view.addWindowListener(gController);
 
-	} //StartGame()
+	} //end of StartGame()
 	
 	public static void main(String [] args){
 		StartGame sg = new StartGame();

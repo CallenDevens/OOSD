@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="model.Board" x="390" y="205">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="model.Piece"
+            endpointName="activePlayerPieces" kind="Simple"/>
+        <Communication destinationClassName="model.SquareComponentFactory"/>
+        <Communication destinationClassName="model.Square"/>
+        <Communication destinationClassName="model.Piece"/>
+    </Class>
+    <Class name="view.BoardPanel" x="240" y="660">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="view.SquarePanel"/>
+    </Class>
+    <Class name="controller.BoardController" x="639" y="172">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="view.BoardPanel"
+            endpointName="boardView" kind="Simple"/>
+        <Association destinationClassName="model.Board"
+            endpointName="board" kind="Simple"/>
+        <Communication destinationClassName="model.Board"/>
+        <Communication destinationClassName="view.BoardPanel"/>
+        <Communication destinationClassName="view.SquarePanel"/>
+        <Communication destinationClassName="model.Piece"/>
+        <Communication destinationClassName="model.SquareComponent"/>
+    </Class>
+    <Class name="model.Game" x="94" y="299">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="model.PieceClass"
+            endpointName="p2Pieces" kind="Simple"/>
+        <Association destinationClassName="model.Player"
+            endpointName="players" kind="Simple"/>
+        <Association destinationClassName="model.PieceClass"
+            endpointName="p1Pieces" kind="Simple"/>
+        <Association destinationClassName="model.Board"
+            endpointName="board" kind="Simple"/>
+        <Communication destinationClassName="model.Board"/>
+        <Communication destinationClassName="model.Piece"/>
+    </Class>
+    <Class name="model.Square" x="578" y="117">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="model.SquareComponent"
+            endpointName="pieceholder" kind="Simple"/>
+    </Class>
+    <Class name="model.Piece" x="203" y="165">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="model.SquareComponent"/>
+        <Association destinationClassName="model.PieceClass"
+            endpointName="pclass" kind="Simple"/>
+    </Class>
+    <Class name="controller.StartGame" x="414" y="640">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="controller.GameController"/>
+    </Class>
+    <Class name="model.SquareComponent" x="408" y="28">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="model.PieceClass" x="206" y="489">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="view.SquarePanel" x="27" y="526">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="controller.GameController" x="639" y="604">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="model.Game"
+            endpointName="game" kind="Simple"/>
+        <Association destinationClassName="view.BoardPanel"
+            endpointName="boardPanel" kind="Simple"/>
+        <Association destinationClassName="model.Board"
+            endpointName="board" kind="Simple"/>
+        <Association destinationClassName="view.GameGUI"
+            endpointName="gameGUI" kind="Simple"/>
+        <Communication destinationClassName="controller.BoardController"/>
+        <Communication destinationClassName="model.Game"/>
+        <Communication destinationClassName="view.GameGUI"/>
+    </Class>
+    <Class name="controller.BoardController.PieceController" x="688" y="463">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="view.BoardPanel"
+            endpointName="bp" kind="Simple"/>
+        <Communication destinationClassName="view.BoardPanel"/>
+        <Communication destinationClassName="view.SquarePanel"/>
+        <Communication destinationClassName="model.Piece"/>
+    </Class>
+    <Class name="model.Player" x="68" y="107">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="model.SquareComponentFactory" x="212" y="41">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="model.Piece"
+            endpointName="itsPiece" kind="Simple"/>
+    </Class>
+    <Class name="controller.BoardController.SquareController" x="660" y="274">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="view.BoardPanel"
+            endpointName="bp" kind="Simple"/>
+        <Communication destinationClassName="model.Board"/>
+        <Communication destinationClassName="view.BoardPanel"/>
+        <Communication destinationClassName="controller.BoardController"/>
+    </Class>
+    <Class name="view.GameGUI" x="119" y="662">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+</ClassDiagram>
