@@ -26,7 +26,7 @@ public class SquareComponentFactory {
 	private static final int HUNTER_HEALTH_POINT = 240;
 	private static final int HUNTER_AGI = 4;
 
-	public static Piece createPiece(PieceClass pieceClass, int posx, int posy) {
+	public static SquareComponent createPiece(PieceClass pieceClass, int posx, int posy) {
 		switch (pieceClass) {
 		case MAGE:
 			return new Piece(pieceClass.MAGE, MAGE_ATTACK, MAGE_HEALTH_POINT, MAGE_AGI, posx, posy);

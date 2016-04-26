@@ -21,9 +21,11 @@ import model.Board;
 import model.Piece;
 
 public class BoardPanel extends JPanel{
-
+	
 	public SquarePanel[][] grids ;  
 	public int size = -1;
+	
+	private BoardState state;
 
 	/* activePiecePosX, activePiecePosY
 	 * coordinates of a piece that is chosen yet not moved by the player
@@ -40,6 +42,18 @@ public class BoardPanel extends JPanel{
 	     super.paintComponent(g);
 	     g.drawImage(imgBackground, 0,0, this);
 	}
+    
+	public void setState(BoardState state){
+		this.state = state;
+	}
+	public boolean isBoardPieceChoosen(){
+		return this.activePiecePosX!=-1&&this.activePiecePosY!=-1;
+	}
+	
+	public void setActivePieceCoordinates(int x, int y){
+		this.activePiecePosX = x;
+		this.activePiecePosY = y;
+	}
 
 	public BoardPanel(int size){
 		this.size = size;
@@ -54,7 +68,8 @@ public class BoardPanel extends JPanel{
 	}
 
 	public void initBoard() {
-		 this.setLayout(new GridLayout(size,size));  
+		 this.setLayout(new GridLayout(size,size));
+		 
 		 int count = 0;  
 		 for(int i = 0; i < grids.length; i++) {  
 		      for(int j = 0; j < grids.length; j++) {  

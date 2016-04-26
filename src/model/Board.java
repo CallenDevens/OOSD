@@ -14,6 +14,7 @@ public class Board {
 	//default piece number 
 	private final int num = 3;
 	public static int size;
+	
 	private Square[][] squares;
 	
 	private static Map<String, ArrayList<Piece>> playerPieces;
@@ -90,7 +91,7 @@ public class Board {
 		int j = 0;
 		for(int i = 0; i < p1Pieces.length; i++){
 			for(; j < num*(i+1); j++){
-				Piece p = SquareComponentFactory.createPiece(p1Pieces[i],j+1, posY);
+				Piece p = (Piece) SquareComponentFactory.createPiece(p1Pieces[i],j+1, posY);
 				this.setPiece(j+1, posY , p);
 			    pieces.add(p);
 			}

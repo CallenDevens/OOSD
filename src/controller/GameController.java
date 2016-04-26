@@ -36,9 +36,9 @@ public class GameController implements WindowListener{
 		int squareSize = gameGUI.squareSize;
 
 		boardPanel= new BoardPanel(size);
-
-		this.gameGUI.addBoardPanel(boardPanel);
-		this.gameGUI.setSize(squareSize*size, squareSize* size);  
+		
+		this.gameGUI.addComponentPanel(boardPanel);
+		this.gameGUI.setSize(squareSize*size+300, squareSize* size+200);  
 
 		this.gameGUI.revalidate();
 		this.gameGUI.repaint();		
@@ -58,6 +58,8 @@ public class GameController implements WindowListener{
 		BoardController bController = new BoardController();
 		bController.setModel(board);
 		bController.setView(boardPanel);
+		bController.setBackPanel(gameGUI.getLayeredBoardPanel());
+		
 		boardPanel.addComponentListener(bController);
 		
 		//invoke component listener

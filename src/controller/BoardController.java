@@ -11,10 +11,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLayeredPane;
 
 import model.Board;
 import model.Piece;
+import view.BoardFramePanel;
 import view.BoardPanel;
+import view.BoardState;
+import view.MenuPanel;
+import view.SquareComponentInfoPanel;
 import view.SquarePanel;
 /* a class implements ComponentListener, 
  * providing actions to be taken when board view is being loaded.
@@ -32,6 +37,11 @@ public class BoardController implements ComponentListener{
     //this controller works as an link between board and visual board
 	private Board board = null;
 	private BoardPanel boardView = null;
+	private BoardFramePanel backPanel = null;
+	
+	public void setBackPanel(BoardFramePanel pane){
+		this.backPanel = pane;
+	}
 	
 	public void setModel(Board b){
 		this.board = b;
@@ -106,7 +116,7 @@ public class BoardController implements ComponentListener{
 				 * add an ActionLister to its piece view(represented by a JButton by now)
 				 */
 				if(board.isPiece(i, j)){
-					grids[i][j].getClickablePiece().addActionListener(new PieceController(x, y));
+					grids[i][j].getClickablePiece().addMouseListener(new PieceController(x, y));
 				}//end of if(grids[i][j].isPiece())
 				else{
 					grids[i][j].addMouseListener(new SquareController(x, y));
@@ -120,7 +130,7 @@ public class BoardController implements ComponentListener{
 	/* a class implements ActionListener to specify actions to be performed when pieces are clicked.
 	 * make it inner to get an access to board model as coordinates are required during the procedure.
 	 * */
-	private class PieceController implements ActionListener{
+	private class PieceController implements MouseListener{
 		private int x;
 		private int y;
 		BoardPanel bp = BoardController.this.boardView;
@@ -131,7 +141,7 @@ public class BoardController implements ComponentListener{
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void mouseClicked(MouseEvent e) {
 			/* if the piece 
 			 * ① is on the active player side && is not chosen by the player
 			 * get AGI from model 
@@ -144,7 +154,19 @@ public class BoardController implements ComponentListener{
 			 * reset active piece state
 			 * */
 			if(board.getPieceByXandY(x, y).isMovable()){
-				SquarePanel square = bp.grids[x][y];
+				//SquarePanel square = bp.grids[x][y];
+
+				if(!backPanel.isMenuShown()){
+					backPanel.addpieceMenuView(new MenuPanel(x*50, y*50+50));
+					bp.setActivePieceCoordinates(x, y);
+					bp.setState(BoardState.STATE_MENU_SHOWN);;
+				}
+				else{
+					backPanel.removePieceMenu();
+					bp.resetPieceMoveState();
+				}
+				
+				/*
 
 				if(square.getState() == SquarePanel.PIECE_NON_CHOSEN){
 					int distance = board.getPieceByXandY(x, y).getMovableDistance();
@@ -152,11 +174,36 @@ public class BoardController implements ComponentListener{
 				}
 				else{
 					bp.setNonChosenPiece(x, y);
-				}
+				}*/
 			}
 			else{
+				backPanel.removePieceMenu();
 				bp.resetPieceMoveState();
 			}
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			//backPanel.add(new SquareComponentInfoPanel() , new Integer(200));
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
 	}
@@ -241,5 +288,16 @@ public class BoardController implements ComponentListener{
 			// TODO Auto-generated method stub
 				
 		}			
+	}
+	
+	
+	private class PieceMoveButtonController implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

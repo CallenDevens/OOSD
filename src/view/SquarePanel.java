@@ -31,7 +31,7 @@ public class SquarePanel extends JPanel{
 	private float transparency;
 
     public SquarePanel() {
-    	this.setSize(80, 80);
+    	this.setSize(60, 60);
     	pieceButton = null;
     	this.state = EMPTY_SQUARE;
     	this.setOpaque(false);
@@ -53,9 +53,10 @@ public class SquarePanel extends JPanel{
 
 	public void setPiece(String string) {
 		pieceButton = new JButton();
-		pieceButton.setPreferredSize(new Dimension(56,56));
-		pieceButton.setMinimumSize(new Dimension(56, 56));
-		
+		pieceButton.setPreferredSize(new Dimension(38,38));
+		pieceButton.setMinimumSize(new Dimension(38, 38));
+		pieceButton.setMaximumSize(new Dimension(38, 38));
+
 		ImageIcon imageIcon = this.resizeImage(new ImageIcon("image/icons/"+string));
 		
 		pieceButton.setIcon(imageIcon);
