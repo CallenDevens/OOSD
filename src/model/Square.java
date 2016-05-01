@@ -42,7 +42,7 @@ public class Square {
 			System.out.printf( "%-6s","n");
 		}
 		else if (pieceholder.getClass().equals(Piece.class)){
-			System.out.print(((Piece)pieceholder).getPieceClass()+" ");
+			System.out.print(((Piece)pieceholder).getPieceClassString()+" ");
 		}
 	}
 }

@@ -25,8 +25,9 @@ public class GameGUI extends JFrame{
 	public static int squareSize = 40;
 	
 	private JPanel mainPanel = new JPanel();
-	private BoardFramePanel backPanel = new BoardFramePanel();
 	private JPanel recordPanel = new JPanel();
+	
+	private BoardFramePanel backPanel;
 	
 	public BoardFramePanel getLayeredBoardPanel(){
 		return this.backPanel;
@@ -41,9 +42,13 @@ public class GameGUI extends JFrame{
 		
 		recordPanel.setSize(300, 500);
 		mainPanel.setSize(660+300, 660+200);
+		mainPanel.setMinimumSize(mainPanel.getSize());
+		mainPanel.setPreferredSize(mainPanel.getSize());
 		
 		this.recordPanel.add(new JButton("button"));
-		backPanel.addBoardView(bPanel);
+		
+		backPanel = new BoardFramePanel(bPanel);
+
 		backPanel.setVisible(true);
 
 		mainPanel.add(backPanel);		
@@ -57,6 +62,9 @@ public class GameGUI extends JFrame{
 		this.setTitle("Game");  
 //		this.setLocation(300, 200);  
 		this.setResizable(false);
+		this.setSize(660+300, 660+40);
+		this.setMinimumSize(getSize());
+		this.setPreferredSize(getSize());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		this.setVisible(true);
 	}

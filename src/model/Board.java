@@ -142,4 +142,12 @@ public class Board {
 		this.getSquare(pieceX, pieceY).setSquareEmpty();
 		this.setPiece(x, y, p);
 	}
+
+	public void attackFromAtoB(int aPosX, int aPosY, int bPosX, int bPosY) {
+		Piece pa = this.getPieceByXandY(aPosX, aPosY);
+		Piece pb = this.getPieceByXandY(bPosX, bPosY);
+		
+		pb.getHurt(pa.getPower());
+		
+	}
 }

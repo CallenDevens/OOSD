@@ -8,7 +8,7 @@ public class SquareComponentInfoPanel extends TransparentPanel{
 	private JLabel ComponentIconLabel;
 	
 	public SquareComponentInfoPanel (){
-		this.add(b);
+//		this.add(b);
 		this.setSize(100,100);
 		this.setVisible(true);
 	}

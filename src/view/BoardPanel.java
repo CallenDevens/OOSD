@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SpringLayout.Constraints;
 
 import model.Board;
 import model.Piece;
@@ -31,8 +34,8 @@ public class BoardPanel extends JPanel{
 	 * coordinates of a piece that is chosen yet not moved by the player
 	 * if no piece is set active, assign -1 to them 
 	 * */
-	public int activePiecePosX = -1;
-	public int activePiecePosY = -1;
+	private int activePiecePosX = -1;
+	private int activePiecePosY = -1;
 	
 	public Image imgBackground = null;
 
@@ -42,6 +45,14 @@ public class BoardPanel extends JPanel{
 	     super.paintComponent(g);
 	     g.drawImage(imgBackground, 0,0, this);
 	}
+    
+    public int getActivePiecePosX(){
+    	return this.activePiecePosX;
+    }
+    
+    public int getActivePiecePosY(){
+    	return this.activePiecePosY;
+    }
     
 	public void setState(BoardState state){
 		this.state = state;
@@ -56,6 +67,7 @@ public class BoardPanel extends JPanel{
 	}
 
 	public BoardPanel(int size){
+		this.setLocation(0,0);
 		this.size = size;
 		try {
 			this.imgBackground = ImageIO.read(new File("image/map.jpg"));
@@ -65,18 +77,34 @@ public class BoardPanel extends JPanel{
 				
 		grids = new SquarePanel[size][size];		
 		initBoard();
+		
+		this.setSize(60*11, 60*11);
+		this.setMinimumSize(getSize());
+		this.setPreferredSize(getSize());
 	}
 
 	public void initBoard() {
-		 this.setLayout(new GridLayout(size,size));
+		 this.setLayout(new GridBagLayout());
 		 
-		 int count = 0;  
+		 GridBagConstraints c = new GridBagConstraints();
+		 c.gridx = 0;
+		 c.gridy = 0;
+		 
+//		 int count = 0;  
 		 for(int i = 0; i < grids.length; i++) {  
 		      for(int j = 0; j < grids.length; j++) {  
 		    	  grids[i][j] = new SquarePanel();
-		          this.add(grids[i][j]);
+		    	 
+		    	  c.gridx = j;
+		    	  c.gridy = i;
+		    	  
+		          this.add(grids[i][j], c);
+		          
+//		          System.out.println(grids[i][j].getWidth());
 		     }
 		 }
+		 
+
 	}
 	
     
@@ -121,5 +149,18 @@ public class BoardPanel extends JPanel{
 	public void resetPieceMoveState() {
 		this.activePiecePosX = -1;
 		this.activePiecePosY = -1;
+	}
+
+	public SquarePanel getSquareByCoordinates(int x, int y) {
+		return this.grids[x][y];
+	}
+
+	public BoardState getState() {
+		return this.state;
+	}
+
+	public void highlightAttackArea(int x, int y) {
+		 this.grids[x][y].markAttackable();
+		 this.repaint();
 	}
 }

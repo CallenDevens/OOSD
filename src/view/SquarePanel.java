@@ -22,6 +22,7 @@ public class SquarePanel extends JPanel{
 	public final static int PIECE_CHOSEN = 101;
 	public final static int EMPTY_SQUARE = 102;
 	public final static int MOVABLE_SQUARE = 103;
+	private static final int ATTACKBLE_SQUARE = 104;
 	
     private JButton pieceButton;
     private int posX;
@@ -32,6 +33,9 @@ public class SquarePanel extends JPanel{
 
     public SquarePanel() {
     	this.setSize(60, 60);
+    	this.setMinimumSize(new Dimension(60, 60));
+    	this.setPreferredSize(getSize());
+    	
     	pieceButton = null;
     	this.state = EMPTY_SQUARE;
     	this.setOpaque(false);
@@ -85,6 +89,7 @@ public class SquarePanel extends JPanel{
 
 	public void clean() {
 		this.setTransparent(0);
+		this.setBackground(Color.YELLOW);
 		if(this.pieceButton!=null){
 		   this.removeAll();;
 		   pieceButton = null;
@@ -125,5 +130,13 @@ public class SquarePanel extends JPanel{
             graphics2d.setColor(getBackground());  
             graphics2d.fillRect(0, 0, getWidth(), getHeight());                
             graphics2d.dispose();  
-    } 
+    }
+
+	public void markAttackable() {
+    	this.setBackground(Color.RED);
+		this.setState(ATTACKBLE_SQUARE);
+		this.setTransparent((float) 0.5);
+		this.repaint();
+		
+	} 
 }

@@ -5,20 +5,22 @@ public class Piece extends SquareComponent{
 	private int attack;
 	private int healthPoint;
 	private int agility;
-	
+	private int atkrange;
+		
 	private boolean movable = false;
 	private PieceClass pclass;
 
-	public Piece(PieceClass pclass, int atk,int health, int agility, int posX, int posY){
+	public Piece(PieceClass pclass, int atk,int health, int agility, int atkrange,int posX, int posY){
 		super(posX, posY);
 		
 		this.pclass = pclass;
 		this.attack = atk;
 		this.healthPoint = health;
 		this.agility = agility;
+		this.atkrange = atkrange;
 	}
 	
-	public String getPieceClass(){
+	public String getPieceClassString(){
 		return this.pclass.toString();
 	}
 	
@@ -49,5 +51,18 @@ public class Piece extends SquareComponent{
 	
 	public boolean isAlive(){
 		return this.healthPoint > 0;
+	}
+
+	public int getPower() {
+		return this.attack;
+	}
+	
+	public int getAttackRange() {
+		return this.atkrange;
+	}
+
+	public PieceClass getPieceClass() {
+		// TODO Auto-generated method stub
+		return this.pclass;
 	}
 }
