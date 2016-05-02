@@ -5,7 +5,7 @@ public class DecoratedPieceProducer {
 		PieceClass pc = p.getPieceClass();
 		switch (pc) {
 		case MAGE:
-			return new LinerAttackPiece(p);
+			return new CircleAttackPiece(p);
 		case ROGUE:
 			return new LinerAttackPiece(p);
 		case WARRIOR:
@@ -13,7 +13,7 @@ public class DecoratedPieceProducer {
 		case PALADIN:
 			return new LinerAttackPiece(p);
 		case PRISST:
-			return new LinerAttackPiece(p);
+			return new CircleAttackPiece(p);
 		case HUNTER:
 			return new LinerAttackPiece(p);
 		default:

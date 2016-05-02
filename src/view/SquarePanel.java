@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,16 +44,18 @@ public class SquarePanel extends JPanel{
         this.setBorder(BorderFactory.createEtchedBorder());
     }
     
-    public void addImage(String imageURL){
-
-    }
-    
     public JButton getClickablePiece(){
     	return this.pieceButton;
     }
 
 	public boolean isPiece() {
 		return pieceButton!=null;
+	}
+	
+	public void addPiece(JButton p){
+		this.pieceButton = p;
+		this.add(p);
+		this.setState(PIECE_NON_CHOSEN);
 	}
 
 	public void setPiece(String string) {
@@ -65,9 +68,8 @@ public class SquarePanel extends JPanel{
 		
 		pieceButton.setIcon(imageIcon);
 		
-		this.state = PIECE_NON_CHOSEN;
+		this.setState(PIECE_NON_CHOSEN);
 		this.add(pieceButton);
-		
 		this.revalidate();
 		this.repaint();
 	}
@@ -87,18 +89,31 @@ public class SquarePanel extends JPanel{
 		this.state = st;
 	}
 
+	
 	public void clean() {
 		this.setTransparent(0);
 		this.setBackground(Color.YELLOW);
-		if(this.pieceButton!=null){
-		   this.removeAll();;
-		   pieceButton = null;
-		}
 		
+		if(this.pieceButton!=null){
+			this.setState(PIECE_NON_CHOSEN);
+		}
+		else{
+			this.setState(EMPTY_SQUARE);;
+		}
 		this.revalidate();
 		this.repaint();
-		this.setState(EMPTY_SQUARE);;
 		
+	}
+	
+	
+	public JButton removePieceButton(){
+		JButton p = this.pieceButton;
+		if(this.pieceButton!=null){
+			this.removeAll();;
+			pieceButton = null;
+		}
+		this.setState(EMPTY_SQUARE);;
+		return p;
 	}
 
 	public void markMovable() {

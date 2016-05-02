@@ -15,13 +15,13 @@ import javax.swing.JPanel;
 public class BoardFramePanel extends JLayeredPane{
 	private final static Integer BOARD_LAYER_NUM = 100;
 	private final static Integer MENU_LAYER_NUM = 200;
+	private final static Integer PIECE_INFO_NUM = 300;
 	
-	
-	private JPanel boardView ;
+	private BoardPanel boardView ;
 	private MenuPanel pieceMenuView;
-	private JPanel pieceInfoView;
+	private SquareComponentInfoPanel pieceInfoView;
 	
-	public BoardFramePanel(JPanel bp){
+	public BoardFramePanel(BoardPanel bp){
 		this.setLayout(new LayeredPaneLayout(this));
 		this.setVisible(true);
 		
@@ -29,13 +29,29 @@ public class BoardFramePanel extends JLayeredPane{
 		this.setMinimumSize(getSize());
 		this.setPreferredSize(getSize());
 		
-		
 		this.boardView = bp;
 		this.add(boardView, BOARD_LAYER_NUM);
 
 		pieceMenuView = new MenuPanel();
 		this.add(pieceMenuView, MENU_LAYER_NUM);
-//		pieceMenuView.setVisible(true);
+		
+		pieceInfoView = new SquareComponentInfoPanel();
+		this.add(pieceInfoView, PIECE_INFO_NUM);
+	}
+	
+	public SquareComponentInfoPanel getPieceInfoPanel(){
+		return this.pieceInfoView;
+	}
+	
+	public void setPieceInfoPanelContent(String job, String atk, String hp, String range, String des){
+		
+		pieceInfoView.setJobLabel(job);
+		pieceInfoView.setImageIcon(job+".png");
+		pieceInfoView.setAttackPointLabel(atk);
+		pieceInfoView.setHealthPointLabel(hp);
+		pieceInfoView.setMoveRangeLabel(range);
+		pieceInfoView.setDescriptionLabel(des);
+		
 	}
 	
 	/* To be removed in next version
@@ -54,10 +70,17 @@ public class BoardFramePanel extends JLayeredPane{
 
 	
 	public void moveAndShowPieceMenu(int poxX, int posY){
-		((MenuPanel)this.pieceMenuView).moveAndShowUp(poxX, posY);
+		this.pieceMenuView.moveAndShowUp(poxX, posY);
 		this.revalidate();
 		this.repaint();
 	}
+	
+	public void moveAndShowPieceInfo(int poxX, int posY){
+		this.pieceInfoView.moveAndShowUp(poxX, posY);
+		this.revalidate();
+		this.repaint();
+	}
+
 	
 	public void showPieceMenuAfterMove(int x, int y) {
 		((MenuPanel)this.pieceMenuView).showUpAfterMove(x, y);
@@ -130,5 +153,12 @@ public class BoardFramePanel extends JLayeredPane{
 
 	public  MenuPanel getMenuPane() {
 		return this.pieceMenuView;
+	}
+
+	public void setPieceInfoInvisible() {
+		if(this.pieceInfoView != null){
+			this.pieceInfoView.setVisible(false);
+			this.pieceInfoView.repaint();
+		}
 	}
 }

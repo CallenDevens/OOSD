@@ -63,9 +63,7 @@ public class MenuPanel extends TransparentPanel{
 		}
 		
 	}
-
-
-	public void menuItemStyleSetter(JButton button){
+	private void menuItemStyleSetter(JButton button){
 		button.setMinimumSize(new Dimension(80,30));
 		button.setPreferredSize(new Dimension(80,30));
 		button.setBackground(Color.BLACK);
@@ -87,7 +85,6 @@ public class MenuPanel extends TransparentPanel{
 		});
 	}
 
-
 	public void addMoveButtonListener(ActionListener moveButtonController) {
 		this.moveButton.addActionListener(moveButtonController);
 	}
@@ -96,13 +93,6 @@ public class MenuPanel extends TransparentPanel{
 		this.atkButton.addActionListener(l);
 	}
 
-
-
-	public void moveAndShowUp(int posX, int posY) {
-		this.setLocation((posY)*50, (posX+1)*50);
-		this.setVisible(true);
-		this.repaint();
-	}
 	
 	public void enableMove(){
 	    this.moveButton.setEnabled(true);
@@ -123,6 +113,12 @@ public class MenuPanel extends TransparentPanel{
 	public JButton getResignButton() {
 		// TODO Auto-generated method stub
 		return this.resignButton;
+	}
+
+
+	public boolean moveEnabled() {
+		// TODO Auto-generated method stub
+		return this.moveButton.isEnabled();
 	}
 
 

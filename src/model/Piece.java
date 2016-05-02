@@ -65,4 +65,15 @@ public class Piece extends SquareComponent{
 		// TODO Auto-generated method stub
 		return this.pclass;
 	}
+
+	public int getHealthyPoint() {
+		// TODO Auto-generated method stub
+		return this.healthPoint;
+	}
+	
+	public int getMoveRange(){
+		return this.atkrange;
+	}
+	
+	
 }

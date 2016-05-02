@@ -65,6 +65,10 @@ public class BoardPanel extends JPanel{
 		this.activePiecePosX = x;
 		this.activePiecePosY = y;
 	}
+	
+	public boolean isActivePice(int x, int y){
+		return this.activePiecePosX == x && this.activePiecePosY == y;
+	}
 
 	public BoardPanel(int size){
 		this.setLocation(0,0);
@@ -103,8 +107,6 @@ public class BoardPanel extends JPanel{
 //		          System.out.println(grids[i][j].getWidth());
 		     }
 		 }
-		 
-
 	}
 	
     
@@ -162,5 +164,10 @@ public class BoardPanel extends JPanel{
 	public void highlightAttackArea(int x, int y) {
 		 this.grids[x][y].markAttackable();
 		 this.repaint();
+	}
+
+	public void addPieceOn(JButton piece, int x, int y) {
+		this.grids[x][y].addPiece(piece);
+		
 	}
 }
