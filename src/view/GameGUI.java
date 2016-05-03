@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -38,8 +40,15 @@ public class GameGUI extends JFrame{
 	public BoardFramePanel getLayeredBoardPanel(){
 		return this.backPanel;
 	}
-	public void addComponentPanel(BoardPanel bPanel){
+	
+	public BoardPanel getBoardPane(){
+		return this.backPanel.getBoardView();
+	}
+	
+	public void addBoardPanel(int bHeight, int bWidth){
 		
+		BoardPanel bPanel= new BoardPanel(bHeight, bWidth);
+
 		FlowLayout fl = new FlowLayout();
 		fl.setAlignment(FlowLayout.LEFT);
 		
@@ -53,7 +62,9 @@ public class GameGUI extends JFrame{
 		
 		this.recordPanel.add(new JButton("button"));
 		
-		backPanel = new BoardFramePanel(bPanel);
+//		backPanel = new BoardFramePanel(bPanel);
+
+		backPanel = new BoardFramePanel(bHeight,bWidth);
 
 		backPanel.setVisible(true);
 
@@ -96,6 +107,11 @@ public class GameGUI extends JFrame{
 		
 		JMenuItem saveItem = new JMenuItem("save");
 		menu.add(saveItem);
+	}
+
+	public void addBoardListener(ComponentListener bController) {
+		this.backPanel.addBoardViewListener(bController);
+		
 	}
 
 }

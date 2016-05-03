@@ -8,13 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import utils.GameSetting;
+
 public class Board {
 	private static Board board = null;
-	
-	//default piece number 
 	private final int num = 3;
-	public static int size;
-	
 	private Square[][] squares;
 	
 	private static Map<String, ArrayList<Piece>> playerPieces;
@@ -22,6 +20,10 @@ public class Board {
 	
 	private int turnCount = 0;
 	
+	private GameSetting settings = GameSetting.getInstance();
+	private int boardHeight = settings.getDimensionHeight();
+	private int boardWidth = settings.getDimensionWidth();
+
 	//use singleton pattern to initialize board instance
 	//for there is only one board in a game
 	public static Board getInstance(){
@@ -32,16 +34,15 @@ public class Board {
 	}
 	
 	private Board(){
-		size = 11;
-		squares = new Square[size][size];	
+
+		squares = new Square[boardHeight][boardWidth];	
 		playerPieces = new HashMap<String, ArrayList<Piece>>();
 		initSquares();
-		
 	}
 
 	private void initSquares() {
-		for(int i = 0; i < size; i++){
-			for(int j = 0; j < size; j++){
+		for(int i = 0; i < boardHeight; i++){
+			for(int j = 0; j < boardWidth; j++){
 				squares[i][j] = new Square(i, j);
 			}
 		}
@@ -74,8 +75,8 @@ public class Board {
 	}
 
 	public void display() {
-		for(int i = 0; i < size; i++){
-			for(int j = 0; j < size; j++){
+		for(int i = 0; i < this.boardHeight; i++){
+			for(int j = 0; j < this.boardWidth; j++){
 				if(this.getSquare(i, j)!=null){
 				    this.getSquare(i, j).display();
 				}
@@ -149,5 +150,13 @@ public class Board {
 		
 		pb.getHurt(pa.getPower());
 		
+	}
+
+	public int getBoardHeight() {
+		return this.boardHeight;
+	}
+
+	public int getBoardWidth() {
+		return this.boardWidth;
 	}
 }

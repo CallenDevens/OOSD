@@ -3,10 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.SizeRecord;
+import utils.GameSetting;
 
 public class LinerAttackPiece extends AbstractAttackPieceDecorator{
-
+	
 	protected LinerAttackPiece(Piece p) {
 		super(p);
 	}
@@ -19,9 +19,10 @@ public class LinerAttackPiece extends AbstractAttackPieceDecorator{
 		int range = piece.getAttackRange();
 		int x = piece.getPosX();
 		int y = piece.getPosY();
+				
 		for(int i = 1; i<=range; i++){
 			
-			if(x+i<SizeRecord.size){
+			if(x+i<dimension_width){
 				Coordinate c1 = new Coordinate(x+i, y);
 				coorList.add(c1);
 			}
@@ -30,7 +31,7 @@ public class LinerAttackPiece extends AbstractAttackPieceDecorator{
 				Coordinate c2 = new Coordinate(x-i, y);
 				coorList.add(c2);
 			}
-			if(y+i<SizeRecord.size){
+			if(y+i<dimension_height){
 				Coordinate c3 = new Coordinate(x, y+i);
 				coorList.add(c3);
 			}

@@ -5,9 +5,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
-import model.Board;
 import model.Game;
-import view.BoardPanel;
 import view.GameGUI;
 /* implements WindowsListner to launch initialization of MVC binds*/
 
@@ -17,9 +15,6 @@ public class GameController implements WindowListener{
 	
 	private Game game;
 	private GameGUI gameGUI;
-	
-	private BoardPanel boardPanel;
-	private Board board;
 	
 	public void setGameModel(Game g){
 		this.game = g;
@@ -31,40 +26,26 @@ public class GameController implements WindowListener{
 	
 	@Override
 	public void windowOpened(WindowEvent e) {
-
-		int size = Game.getBoard().size;
+		int boardHight = game.getBoardDimensionHeight();
+		int boardWidth = game.getBoardDimensionWidth();	
 		int squareSize = gameGUI.squareSize;
-
-		boardPanel= new BoardPanel(size);
 		
-		this.gameGUI.addComponentPanel(boardPanel);
-		this.gameGUI.setSize(squareSize*size+300, squareSize* size+200);  
-
+		this.gameGUI.addBoardPanel(boardHight, boardWidth);
+		this.gameGUI.setSize(squareSize*boardWidth+300, squareSize* boardHight+200);  
 		this.gameGUI.revalidate();
-		this.gameGUI.repaint();		
+		this.gameGUI.repaint();	
 		this.game.startOneTurn();
 		
-		/* call addBoardController here 
-		as board controller must be bound to model and view 
-		after GameController is stably connected to its M and V
-		*/
 		this.addBoardController();
-		
 	}
 
 	private void addBoardController() {
-		board = Game.getBoard();
 		
 		BoardController bController = new BoardController();
-		bController.setModel(board);
-		bController.setView(boardPanel);
+		bController.setModel(Game.getBoard());
+		bController.setView(gameGUI.getBoardPane());
 		bController.setBackPanel(gameGUI.getLayeredBoardPanel());
-		
-		boardPanel.addComponentListener(bController);
-		
-		//invoke component listener
-		boardPanel.setVisible(false);
-		boardPanel.setVisible(true);
+		gameGUI.addBoardListener(bController);
 	}
 
 	@Override

@@ -121,23 +121,13 @@ public class BoardController implements ComponentListener{
 	 * add ActionListeners to all squares within the board view.
 	 */
 	private void initializeSquareActionListener(){
-		int size = board.size;
+		int size = board.getBoardHeight();
 		
 		for(int i = 0; i< size; i++){
 			for(int j =0; j< size; j++){
 				final int x = i;
 				final int y = j;
 				
-				/* ①
-				 * if a square is empty, 
-				 * which means it doesn't hold any SquareComponent(Piece ,Barrier or HP bonus)
-				 * add a MouseListener implemented for square
-				 * 
-				 * ②
-				 * if a square holds a piece
-				 * add an ActionLister to its piece view(represented by a JButton by now)
-				 */
-//				String key = "("+x+","+y+")";
 				if(board.isPiece(i, j)){
 					PieceController pc = new PieceController(board.getPieceByXandY(x, y));
 					//TODO change 
@@ -168,6 +158,7 @@ public class BoardController implements ComponentListener{
 
 			int x = p.getPosX();
 			int y = p.getPosY();
+			
 			if(board.getPieceByXandY(x, y).isMovable()){
 				
 				//keep other pieces from moving in a single round
@@ -191,7 +182,7 @@ public class BoardController implements ComponentListener{
 						board.attackFromAtoB(attackingPiecePosX, attackingPiecePosY, x, y);
 						
 						boardView.resetPieceMoveState();						
-						refreshPieces();
+						boardView.cleanAllSquares();
 						
 						boardView.repaint();
 						board.switchActivePieces();
@@ -235,24 +226,20 @@ public class BoardController implements ComponentListener{
 			backPanel.setPieceInfoInvisible();			
 		}
 	}
+	
+	
 	/**
 	 * Following players' movements, redraw board and pieces
 	 * establish links between squares and specific model
 	 * invoked after turn ends.
 	 * */
-
+/*
 	private void refreshPieces() {
 		int size = board.size;
-    	for(int i =0 ;i < size; i++){
-    		for(int j = 0; j < size; j++){
-    			boardView.grids[i][j].clean(); 
-    		}
-    	}
-    	
-//		this.setPieces();
-//    	this.addSquareActionListener();
+		boardView.cleanAllSquares();
 		boardView.repaint();
 	}
+	*/
 	
 	/* a class implements MouseListener to specify actions to be performed when squares are clicked.
 	 * make it inner to get an access to board model as coordinates are required during the procedure.
@@ -284,7 +271,7 @@ public class BoardController implements ComponentListener{
 				 * call the menu panel 
 				 * */
 				if(board.getPieceByXandY(x, y)==null){
-					refreshPieces();
+					boardView.cleanAllSquares();
 					backPanel.getMenuPane().moveAndShowUp(x, y);
 				}
 			}
@@ -302,14 +289,14 @@ public class BoardController implements ComponentListener{
 					
 					//change view
 					bp.setActivePieceCoordinates(x, y);
-					
-					JButton piece = boardView.grids[pieceX][pieceY].removePieceButton();
+										
+					JButton piece = boardView.removePieceOn(pieceX,pieceY);
 					boardView.addPieceOn(piece, x, y);
 					
 					backPanel.showPieceMenuAfterMove(x, y);
-				    backPanel.getMenuPane().disableMove();
-					
-				    refreshPieces();
+				    backPanel.disableMenuMove();
+				    
+					boardView.cleanAllSquares();
 			    }
 			}	
 		}
@@ -357,14 +344,11 @@ public class BoardController implements ComponentListener{
 				boardView.setState(PanelState.BOARD_WAIT_FOR_MOVE);
 			}
 			else{
-			//	bp.setNonChosenPiece(x, y);
 			}		
 		}		
 	}
 	
-	
 	private class PieceAttackButtonController implements ActionListener{
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			backPanel.setPieceMenuInvisible();
@@ -372,7 +356,6 @@ public class BoardController implements ComponentListener{
 			int y = boardView.getActivePiecePosY();
 			Piece p = board.getPieceByXandY(x, y);
 			SquareComponent attackPiece = DecoratedPieceProducer.generateAttackPiece(p);
-			
 			ArrayList<Coordinate> clist = (ArrayList<Coordinate>) ((AbstractAttackPieceDecorator)attackPiece).getAttackField();
 			
 			for(Coordinate c: clist){
@@ -381,7 +364,4 @@ public class BoardController implements ComponentListener{
 			boardView.setState(PanelState.BOARD_WAITING_FOR_ATTACK);
 		}		
 	}
-
-	
-	
 }

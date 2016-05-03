@@ -8,6 +8,7 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -21,7 +22,9 @@ public class BoardFramePanel extends JLayeredPane{
 	private MenuPanel pieceMenuView;
 	private SquareComponentInfoPanel pieceInfoView;
 	
-	public BoardFramePanel(BoardPanel bp){
+	public BoardFramePanel(int bHeight, int bWidth){
+		
+		this.boardView = new BoardPanel(bHeight, bWidth);
 		this.setLayout(new LayeredPaneLayout(this));
 		this.setVisible(true);
 		
@@ -29,7 +32,6 @@ public class BoardFramePanel extends JLayeredPane{
 		this.setMinimumSize(getSize());
 		this.setPreferredSize(getSize());
 		
-		this.boardView = bp;
 		this.add(boardView, BOARD_LAYER_NUM);
 
 		pieceMenuView = new MenuPanel();
@@ -38,7 +40,9 @@ public class BoardFramePanel extends JLayeredPane{
 		pieceInfoView = new SquareComponentInfoPanel();
 		this.add(pieceInfoView, PIECE_INFO_NUM);
 	}
-	
+	public BoardPanel getBoardView(){
+		return this.boardView;
+	}
 	public SquareComponentInfoPanel getPieceInfoPanel(){
 		return this.pieceInfoView;
 	}
@@ -178,5 +182,14 @@ public class BoardFramePanel extends JLayeredPane{
 
 	public boolean menuMoveEnabled() {
 		return this.pieceMenuView.isMoveEnabled();
+	}
+
+	public void disableMenuMove() {
+		this.pieceMenuView.disableMove();	
+	}
+	public void addBoardViewListener(ComponentListener bController) {
+		this.boardView.addComponentListener(bController);
+		this.boardView.setVisible(false);
+		this.boardView.setVisible(true);
 	}
 }

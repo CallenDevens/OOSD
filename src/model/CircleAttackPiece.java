@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.SizeRecord;
+import utils.GameSetting;
 
 public class CircleAttackPiece extends AbstractAttackPieceDecorator{
 
@@ -22,12 +22,12 @@ public class CircleAttackPiece extends AbstractAttackPieceDecorator{
 		
 		for(int i = 1; i<=range; i++){
 			
-			if(x+i<SizeRecord.size){
+			if(x+i<dimension_width){
 				Coordinate c1 = new Coordinate(x+i, y);
 				coorList.add(c1);
 				
 				for(int j = 1; j<=range; j++){
-    				if(y+j<SizeRecord.size){
+    				if(y+j<dimension_height){
     					c1 = new Coordinate(x+i, y+j);
 						coorList.add(c1);
     				}
@@ -44,7 +44,7 @@ public class CircleAttackPiece extends AbstractAttackPieceDecorator{
 				coorList.add(c2);
 				
 				for(int j = 1; j<=range; j++){
-    				if(y+j<SizeRecord.size){
+    				if(y+j<dimension_height){
     					c2 = new Coordinate(x-i, y+j);
 						coorList.add(c2);
     				}
@@ -54,7 +54,7 @@ public class CircleAttackPiece extends AbstractAttackPieceDecorator{
     				}
 				}
 			}
-			if(y+i<SizeRecord.size){
+			if(y+i<dimension_height){
 				Coordinate c3 = new Coordinate(x, y+i);
 				coorList.add(c3);
 			}

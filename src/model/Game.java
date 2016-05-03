@@ -6,7 +6,6 @@ import java.util.Map;
 public class Game {
 	public static Board board;
 	public static ArrayList<Player> players = new ArrayList<Player>();
-	//TODO: as an arrayList
 	
 	private PieceClass [] p1Pieces = {PieceClass.MAGE, PieceClass.WARRIOR, PieceClass.HUNTER};
 	private PieceClass [] p2Pieces = {PieceClass.ROGUE, PieceClass.PALADIN, PieceClass.PRISST};
@@ -21,12 +20,19 @@ public class Game {
 		Player p2 = new Player("p2");
 		
 		board.setPieceforPlayer(p1.getPlayerName(),p1Pieces,0);
-		board.setPieceforPlayer(p2.getPlayerName(),p2Pieces,board.size-1);
+		board.setPieceforPlayer(p2.getPlayerName(),p2Pieces,board.getBoardWidth()-1);
 	}
 	public void testDisplay(){
 		board.display();
 	}
 	
+	public int getBoardDimensionWidth(){
+		return board.getBoardWidth();
+	}
+	
+	public int getBoardDimensionHeight(){
+		return board.getBoardHeight();
+	}
 	public static Board getBoard(){
 		return board;
 	}
@@ -37,7 +43,6 @@ public class Game {
 	}
 
 	public boolean isGameEnd() {
-		// TODO Auto-generated method stub
 		return board.piecesOfOnePlayerAllRemoved();
 	}
 
@@ -46,7 +51,6 @@ public class Game {
 	}
 
 	public ArrayList<Piece> getActivePieces() {
-		// TODO Auto-generated method stub
 		return board.getActivePieces();
 	}
 }

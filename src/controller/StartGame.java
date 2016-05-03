@@ -15,7 +15,7 @@ public class StartGame {
 		GameGUI view 	= new GameGUI();
 				
 		GameController gController = new GameController();
-		//assign model and view to game controller
+
 		gController.setGameModel(game);
 		gController.setView(view);
 		

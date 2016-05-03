@@ -26,8 +26,9 @@ import model.PieceClass;
 
 public class BoardPanel extends BasicPanel{
 	
-	public SquarePanel[][] grids ;  
-	public int size = -1;	
+	private SquarePanel[][] grids ;  
+	private int dimension_width = -1;
+	private int dimension_height = -1;
 	private PanelState state;
 
 	private int activePiecePosX = -1;
@@ -66,31 +67,33 @@ public class BoardPanel extends BasicPanel{
 		return this.activePiecePosX == x && this.activePiecePosY == y;
 	}
 
-	public BoardPanel(int size){
+	public BoardPanel(int height, int width){
 		this.setLocation(0,0);
-		this.size = size;
+		
+		this.dimension_width = width;
+		this.dimension_height = height;
+
 		try {
 			this.imgBackground = ImageIO.read(new File("image/map.jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 				
-		grids = new SquarePanel[size][size];		
+		grids = new SquarePanel[height][width];		
 		initBoard();
 		
-		this.setSize(60*11, 60*11);
+		this.setSize(60*width, 60*height);
 		this.setMinimumSize(getSize());
 		this.setPreferredSize(getSize());
 	}
 
 	public void initBoard() {
 		 this.setLayout(new GridBagLayout());
-		 		 
-		 for(int i = 0; i < grids.length; i++) {  
-		      for(int j = 0; j < grids.length; j++) {  
+		 
+		 for(int i = 0; i < this.dimension_height; i++) {  
+		      for(int j = 0; j < this.dimension_width; j++) {  
 		    	  grids[i][j] = new SquarePanel();
 		          this.addComponent(grids[i][j], i,j);
-		          
 		     }
 		 }
 	}
@@ -168,5 +171,18 @@ public class BoardPanel extends BasicPanel{
 
 	public void setPieceOnBoard(String imgName,int x, int y) {
 		this.grids[x][y].setPiece(imgName);
+	}
+
+	public void cleanAllSquares() {
+    	for(int i =0 ;i < this.dimension_height; i++){
+    		for(int j = 0; j < this.dimension_width; j++){
+    			grids[i][j].clean(); 
+    		}
+    	}
+    	this.repaint();
+	}
+
+	public JButton removePieceOn(int pieceX, int pieceY) {
+		return grids[pieceX][pieceY].removePieceButton();
 	}
 }
