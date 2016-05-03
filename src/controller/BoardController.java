@@ -22,9 +22,10 @@ import model.Coordinate;
 import model.DecoratedPieceProducer;
 import model.Piece;
 import model.SquareComponent;
+import view.BasicPanel;
 import view.BoardFramePanel;
 import view.BoardPanel;
-import view.BoardState;
+import view.PanelState;
 import view.MenuPanel;
 import view.SquareComponentInfoPanel;
 import view.SquarePanel;
@@ -84,17 +85,15 @@ public class BoardController implements ComponentListener{
 	private void addMenuPanelListener() {
 		this.backPanel.addPieceMoveButtonListener(new PieceMoveButtonController());
 		this.backPanel.addPieceAttackButtonListener(new PieceAttackButtonController());
-		this.backPanel.getMenuPane().getResignButton().addActionListener(new ActionListener(){
+		this.backPanel.addMenuResignActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.switchActivePieces();
-				backPanel.getMenuPane().enableMove();
-				backPanel.getMenuPane().setVisible(false);
-				
+				backPanel.enableMenuMove();
+				backPanel.setMenuVisisble(false);				
 			}
 		});
-		//TODO and attack resign
 	}
 
 	@Override
@@ -109,10 +108,11 @@ public class BoardController implements ComponentListener{
 	 */
 	private void setPieces(){
     	ArrayList<Piece> pieces = board.getPieces();
+    	
     	for(Piece p: pieces){
     		int x = p.getPosX();
     		int y = p.getPosY();
-    		boardView.grids[x][y].setPiece(p.getPieceClass().toString()+".png");
+    		boardView.setPieceOnBoard(p.getPieceClass().toString()+".png", x, y);
     	}
 	}//End of setPieces()
 	
@@ -122,8 +122,6 @@ public class BoardController implements ComponentListener{
 	 */
 	private void initializeSquareActionListener(){
 		int size = board.size;
-		SquarePanel [][] grids = boardView.grids;
-
 		
 		for(int i = 0; i< size; i++){
 			for(int j =0; j< size; j++){
@@ -142,14 +140,13 @@ public class BoardController implements ComponentListener{
 //				String key = "("+x+","+y+")";
 				if(board.isPiece(i, j)){
 					PieceController pc = new PieceController(board.getPieceByXandY(x, y));
-					grids[i][j].getClickablePiece().addMouseListener(pc);
+					//TODO change 
+					((SquarePanel) boardView.getSubComponent(x, y)).getClickablePiece().addMouseListener(pc);
 					
-//					this.controllers.put(key, pc);
 				}//end of if(grids[i][j].isPiece())
 				
 				SquareController sc = new SquareController(x, y);
-				grids[i][j].addMouseListener(sc);
-//				this.controllers.put(key, sc);
+				boardView.getSubComponent(x, y).addMouseListener(sc);
 				
 				//TODO if a square holds something else
 			}
@@ -161,8 +158,7 @@ public class BoardController implements ComponentListener{
 	 * */
 	private class PieceController implements MouseListener{
 		private Piece p;
-		BoardPanel bp = BoardController.this.boardView;
-
+		
 		public PieceController(Piece p){
 			this.p = p;
 		}
@@ -172,37 +168,29 @@ public class BoardController implements ComponentListener{
 
 			int x = p.getPosX();
 			int y = p.getPosY();
-			/* if the piece 
-			 * ① is on the active player side && is not chosen by the player
-			 * get AGI from model 
-			 * calculate and highlight movable area on the board
-			 * 
-			 * ② is on the active player side && has been chosen by the player
-			 * reset highlighted area
-			 * 
-			 * ③ is not on active side
-			 * reset active piece state
-			 * */
 			if(board.getPieceByXandY(x, y).isMovable()){
-				if(!backPanel.getMenuPane().moveEnabled() && !boardView.isActivePice(x, y)){
+				
+				//keep other pieces from moving in a single round
+				if(!backPanel.menuMoveEnabled() && !boardView.isActivePice(x, y)){
 					
 				}
+				
 				else{
 					backPanel.moveAndShowPieceMenu(x, y);
 					backPanel.setPieceInfoInvisible();
 					boardView.setActivePieceCoordinates(x, y);
-					boardView.setState(BoardState.STATE_MENU_SHOWN);
+					boardView.setState(PanelState.BOARD_MENU_SHOWN);
 				}
 			}
 			else{
-				if(boardView.getState() == BoardState.STATE_WAITING_FOR_ATTACK){
-					if(bp.isBoardPieceChoosen()){
-						int attackingPiecePosX = bp.getActivePiecePosX();
-						int attackingPiecePosY = bp.getActivePiecePosY();
+				if(boardView.getState() == PanelState.BOARD_WAITING_FOR_ATTACK){
+					if(boardView.isBoardPieceChoosen()){
+						int attackingPiecePosX = boardView.getActivePiecePosX();
+						int attackingPiecePosY = boardView.getActivePiecePosY();
 						
 						board.attackFromAtoB(attackingPiecePosX, attackingPiecePosY, x, y);
 						
-						bp.resetPieceMoveState();						
+						boardView.resetPieceMoveState();						
 						refreshPieces();
 						
 						boardView.repaint();
@@ -211,9 +199,9 @@ public class BoardController implements ComponentListener{
 
 					}
 					backPanel.setPieceMenuInvisible();
-					bp.resetPieceMoveState();
+					boardView.resetPieceMoveState();
 				}
-				else if(boardView.getState() == BoardState.STATE_WAIT_FOR_MOVE){
+				else if(boardView.getState() == PanelState.BOARD_WAIT_FOR_MOVE){
 					return;
 				}
 			}
@@ -289,7 +277,7 @@ public class BoardController implements ComponentListener{
 			 * 
 			 * else do nothing
 			 * */
-			if(boardView.getState() == BoardState.STATE_WAITING_FOR_ATTACK){
+			if(boardView.getState() == PanelState.BOARD_WAITING_FOR_ATTACK){
 				/*if the board is waiting for picking up attacked object 
 				 * the user clicked empty square
 				 * cancel attack highlight and 
@@ -305,7 +293,7 @@ public class BoardController implements ComponentListener{
 				backPanel.setPieceMenuInvisible();
 				return;
 			}else if(bp.isBoardPieceChoosen()){
-				if(boardView.getState() == BoardState.STATE_WAIT_FOR_MOVE){
+				if(boardView.getState() == PanelState.BOARD_WAIT_FOR_MOVE){
 					int pieceX = bp.getActivePiecePosX();
 					int pieceY = bp.getActivePiecePosY();
 					
@@ -361,12 +349,12 @@ public class BoardController implements ComponentListener{
 			int x = boardView.getActivePiecePosX();
 			int y = boardView.getActivePiecePosY();
 			
-			SquarePanel square = boardView.getSquareByCoordinates(x, y);
+			BasicPanel square = boardView.getSubComponent(x, y);
 			
-			if(square.getState() == SquarePanel.PIECE_NON_CHOSEN){
+			if(((SquarePanel) square).getState() == PanelState.PIECE_NON_CHOSEN){
 				int distance = board.getPieceByXandY(x, y).getMovableDistance();
 				boardView.setChosenPiece(x, y, distance);
-				boardView.setState(BoardState.STATE_WAIT_FOR_MOVE);
+				boardView.setState(PanelState.BOARD_WAIT_FOR_MOVE);
 			}
 			else{
 			//	bp.setNonChosenPiece(x, y);
@@ -380,12 +368,9 @@ public class BoardController implements ComponentListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			backPanel.setPieceMenuInvisible();
-			
 			int x = boardView.getActivePiecePosX();
 			int y = boardView.getActivePiecePosY();
-
 			Piece p = board.getPieceByXandY(x, y);
-			
 			SquareComponent attackPiece = DecoratedPieceProducer.generateAttackPiece(p);
 			
 			ArrayList<Coordinate> clist = (ArrayList<Coordinate>) ((AbstractAttackPieceDecorator)attackPiece).getAttackField();
@@ -393,7 +378,7 @@ public class BoardController implements ComponentListener{
 			for(Coordinate c: clist){
 				boardView.highlightAttackArea(c.getCoordinateX(), c.getCoordinateY());
 			}
-			boardView.setState(BoardState.STATE_WAITING_FOR_ATTACK);
+			boardView.setState(PanelState.BOARD_WAITING_FOR_ATTACK);
 		}		
 	}
 

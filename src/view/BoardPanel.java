@@ -22,21 +22,17 @@ import javax.swing.SpringLayout.Constraints;
 
 import model.Board;
 import model.Piece;
+import model.PieceClass;
 
-public class BoardPanel extends JPanel{
+public class BoardPanel extends BasicPanel{
 	
 	public SquarePanel[][] grids ;  
-	public int size = -1;
-	
-	private BoardState state;
+	public int size = -1;	
+	private PanelState state;
 
-	/* activePiecePosX, activePiecePosY
-	 * coordinates of a piece that is chosen yet not moved by the player
-	 * if no piece is set active, assign -1 to them 
-	 * */
 	private int activePiecePosX = -1;
 	private int activePiecePosY = -1;
-	
+
 	public Image imgBackground = null;
 
     @Override
@@ -54,7 +50,7 @@ public class BoardPanel extends JPanel{
     	return this.activePiecePosY;
     }
     
-	public void setState(BoardState state){
+	public void setState(PanelState state){
 		this.state = state;
 	}
 	public boolean isBoardPieceChoosen(){
@@ -89,26 +85,24 @@ public class BoardPanel extends JPanel{
 
 	public void initBoard() {
 		 this.setLayout(new GridBagLayout());
-		 
-		 GridBagConstraints c = new GridBagConstraints();
-		 c.gridx = 0;
-		 c.gridy = 0;
-		 
-//		 int count = 0;  
+		 		 
 		 for(int i = 0; i < grids.length; i++) {  
 		      for(int j = 0; j < grids.length; j++) {  
 		    	  grids[i][j] = new SquarePanel();
-		    	 
-		    	  c.gridx = j;
-		    	  c.gridy = i;
-		    	  
-		          this.add(grids[i][j], c);
+		          this.addComponent(grids[i][j], i,j);
 		          
-//		          System.out.println(grids[i][j].getWidth());
 		     }
 		 }
 	}
 	
+	@Override
+	protected void addComponent(BasicPanel panel, int posX, int posY){
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = posY;
+		c.gridy = posX;
+		this.add(panel, c);
+
+	}
     
 	protected  void markMovableArea(int x, int y, int distance) {
 		for(int i = 0; i < grids.length; i++){
@@ -137,14 +131,14 @@ public class BoardPanel extends JPanel{
 	public void setChosenPiece(int x, int y, int distance) {
 		this.activePiecePosX = x;
 		this.activePiecePosY = y;
-		grids[x][y].setState(SquarePanel.PIECE_CHOSEN);
+		grids[x][y].setState(PanelState.PIECE_CHOSEN);
 		this.markMovableArea(x, y, distance);		
 	}
 
 	public void setNonChosenPiece(int x, int y) {
 		this.activePiecePosX = -1;
 		this.activePiecePosY = -1;
-		grids[x][y].setState(SquarePanel.PIECE_NON_CHOSEN);	
+		grids[x][y].setState(PanelState.PIECE_NON_CHOSEN);	
 		this.cancelHighlighted();
 	}
 
@@ -153,11 +147,12 @@ public class BoardPanel extends JPanel{
 		this.activePiecePosY = -1;
 	}
 
-	public SquarePanel getSquareByCoordinates(int x, int y) {
-		return this.grids[x][y];
+	@Override
+	public BasicPanel getSubComponent(int posX, int posY){
+		return this.grids[posX][posY];
 	}
 
-	public BoardState getState() {
+	public PanelState getState() {
 		return this.state;
 	}
 
@@ -169,5 +164,9 @@ public class BoardPanel extends JPanel{
 	public void addPieceOn(JButton piece, int x, int y) {
 		this.grids[x][y].addPiece(piece);
 		
+	}
+
+	public void setPieceOnBoard(String imgName,int x, int y) {
+		this.grids[x][y].setPiece(imgName);
 	}
 }

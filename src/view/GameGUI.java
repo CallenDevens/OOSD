@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -12,6 +13,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -26,8 +30,10 @@ public class GameGUI extends JFrame{
 	
 	private JPanel mainPanel = new JPanel();
 	private JPanel recordPanel = new JPanel();
-	
 	private BoardFramePanel backPanel;
+	
+	private JMenuBar menuBar;
+	private JMenu menu, submenu;
 	
 	public BoardFramePanel getLayeredBoardPanel(){
 		return this.backPanel;
@@ -59,6 +65,9 @@ public class GameGUI extends JFrame{
 	}
 	
 	public GameGUI(){		
+		this.initializeMenu();
+		this.setJMenuBar(menuBar);
+
 		this.setTitle("Game");  
 //		this.setLocation(300, 200);  
 		this.setResizable(false);
@@ -67,6 +76,26 @@ public class GameGUI extends JFrame{
 		this.setPreferredSize(getSize());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		this.setVisible(true);
+	}
+	
+	private void initializeMenu() {
+		menuBar = new JMenuBar();
+		
+		//Build the first menu.
+		menu = new JMenu("Game");
+		JMenu setMenu = new JMenu("Preferences");
+
+		menu.setMnemonic(KeyEvent.VK_A);
+		menuBar.add(menu);
+		
+		menuBar.add(setMenu);
+
+		//a group of JMenuItems
+		JMenuItem loadItem = new JMenuItem("load",KeyEvent.VK_T);
+		menu.add(loadItem);
+		
+		JMenuItem saveItem = new JMenuItem("save");
+		menu.add(saveItem);
 	}
 
 }

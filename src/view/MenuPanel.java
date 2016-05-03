@@ -12,7 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class MenuPanel extends TransparentPanel{
+public class MenuPanel extends BasicPanel{
 
 	private Map<String, JButton> menuitems = new LinkedHashMap<String,JButton>();
 	
@@ -35,11 +35,6 @@ public class MenuPanel extends TransparentPanel{
 		this.setBorder(BorderFactory.createLineBorder(Color.decode("#1691D9"),2));
 
 		customizeMenuItems();
-		/*
-		this.add(moveButton);
-		this.add(atkButton);
-		this.add(resignButton);
-		*/
 		
 		this.setLocation(0,0);
 		this.setVisible(false);
@@ -54,7 +49,6 @@ public class MenuPanel extends TransparentPanel{
 			
 		});
 	}
-	
 	
 	private void customizeMenuItems() {
 		for(JButton button:menuitems.values()){
@@ -111,14 +105,16 @@ public class MenuPanel extends TransparentPanel{
 
 
 	public JButton getResignButton() {
-		// TODO Auto-generated method stub
 		return this.resignButton;
 	}
 
-
-	public boolean moveEnabled() {
-		// TODO Auto-generated method stub
+	public boolean isMoveEnabled() {
 		return this.moveButton.isEnabled();
+	}
+
+	public void addMenuResignActionListener(ActionListener l) {
+		this.resignButton.addActionListener(l);
+		
 	}
 
 

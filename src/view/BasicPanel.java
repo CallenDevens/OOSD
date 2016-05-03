@@ -11,7 +11,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public abstract class TransparentPanel extends JPanel{
+public abstract class BasicPanel extends JPanel{
+	
 	protected float transparency;
 
     protected void setTransparent(float transparency) {  
@@ -36,5 +37,34 @@ public abstract class TransparentPanel extends JPanel{
 		this.repaint();
 	}
 	
+	protected PanelState getState() {
+		return null;
+	}
+
+	
+	protected BasicPanel getSubComponent(){
+		return null;
+	}
+	
+	protected BasicPanel getSubComponent(int posX, int posY){
+		return null;
+	}
+	
+	protected void addComponent(BasicPanel panel){
+		
+	}
+	
+	protected void removeComponent(BasicPanel panel){
+		
+	}
+	
+	protected void addComponent(BasicPanel panel, int posX, int posY){
+		
+	}
+	
+	protected void removeComponent(int posX, int posY){
+		
+	}
+
 
 }

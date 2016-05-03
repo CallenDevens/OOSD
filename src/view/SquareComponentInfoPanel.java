@@ -19,7 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class SquareComponentInfoPanel extends TransparentPanel{
+public class SquareComponentInfoPanel extends BasicPanel{
 
 	private JLabel jobLabel = new JLabel();
 	private JLabel imageIcon = new JLabel();

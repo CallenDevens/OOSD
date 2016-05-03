@@ -161,4 +161,22 @@ public class BoardFramePanel extends JLayeredPane{
 			this.pieceInfoView.repaint();
 		}
 	}
+
+	public void enableMenuMove() {
+		this.pieceMenuView.enableMove();
+	}
+
+	public void setMenuVisisble(boolean b) {
+		this.pieceMenuView.setVisible(b);
+		
+	}
+
+	public void addMenuResignActionListener(ActionListener l) {
+		this.pieceMenuView.addMenuResignActionListener(l);
+		
+	}
+
+	public boolean menuMoveEnabled() {
+		return this.pieceMenuView.isMoveEnabled();
+	}
 }

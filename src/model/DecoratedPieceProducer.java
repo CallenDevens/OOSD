@@ -9,7 +9,7 @@ public class DecoratedPieceProducer {
 		case ROGUE:
 			return new LinerAttackPiece(p);
 		case WARRIOR:
-			return new LinerAttackPiece(p);
+			return new CircleAttackPiece(p);
 		case PALADIN:
 			return new LinerAttackPiece(p);
 		case PRISST:

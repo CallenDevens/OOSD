@@ -17,19 +17,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class SquarePanel extends JPanel{
-
-	public final static int PIECE_NON_CHOSEN = 100;
-	public final static int PIECE_CHOSEN = 101;
-	public final static int EMPTY_SQUARE = 102;
-	public final static int MOVABLE_SQUARE = 103;
-	private static final int ATTACKBLE_SQUARE = 104;
-	
+public class SquarePanel extends BasicPanel{	
     private JButton pieceButton;
     private int posX;
     private int posY;
     
-    private int state;
+    private PanelState state;
 	private float transparency;
 
     public SquarePanel() {
@@ -38,7 +31,9 @@ public class SquarePanel extends JPanel{
     	this.setPreferredSize(getSize());
     	
     	pieceButton = null;
-    	this.state = EMPTY_SQUARE;
+ //   	this.state = EMPTY_SQUARE;
+    	
+    	this.setState(PanelState.SQUARE_EMPTY);
     	this.setOpaque(false);
     	this.setBackground(Color.YELLOW);
         this.setBorder(BorderFactory.createEtchedBorder());
@@ -55,9 +50,9 @@ public class SquarePanel extends JPanel{
 	public void addPiece(JButton p){
 		this.pieceButton = p;
 		this.add(p);
-		this.setState(PIECE_NON_CHOSEN);
+		this.setState(PanelState.PIECE_NON_CHOSEN);
 	}
-
+	
 	public void setPiece(String string) {
 		pieceButton = new JButton();
 		pieceButton.setPreferredSize(new Dimension(38,38));
@@ -68,7 +63,7 @@ public class SquarePanel extends JPanel{
 		
 		pieceButton.setIcon(imageIcon);
 		
-		this.setState(PIECE_NON_CHOSEN);
+		this.setState(PanelState.PIECE_NON_CHOSEN);
 		this.add(pieceButton);
 		this.revalidate();
 		this.repaint();
@@ -81,12 +76,12 @@ public class SquarePanel extends JPanel{
 
 	}
 
-	public int getState() {
+	public PanelState getState() {
 		return this.state;
 	}
 	
-	public void setState( int st){
-		this.state = st;
+	public void setState( PanelState state){
+		this.state = state;
 	}
 
 	
@@ -95,10 +90,10 @@ public class SquarePanel extends JPanel{
 		this.setBackground(Color.YELLOW);
 		
 		if(this.pieceButton!=null){
-			this.setState(PIECE_NON_CHOSEN);
+			this.setState(PanelState.PIECE_NON_CHOSEN);
 		}
 		else{
-			this.setState(EMPTY_SQUARE);;
+			this.setState(PanelState.SQUARE_EMPTY);;
 		}
 		this.revalidate();
 		this.repaint();
@@ -112,20 +107,20 @@ public class SquarePanel extends JPanel{
 			this.removeAll();;
 			pieceButton = null;
 		}
-		this.setState(EMPTY_SQUARE);;
+		this.setState(PanelState.SQUARE_EMPTY);;
 		return p;
 	}
 
 	public void markMovable() {
 		//this.setOpaque(true);
-		this.setState(MOVABLE_SQUARE);
+		this.setState(PanelState.SQUARE_MOVABLE);
 		this.setTransparent((float) 0.5);
 		this.repaint();
 
 	}
 	
 	public boolean isMovable(){
-		return  this.state == MOVABLE_SQUARE;
+		return  this.state == PanelState.SQUARE_MOVABLE;
 	}
 	
     public void setTransparent(float transparency) {  
@@ -149,7 +144,7 @@ public class SquarePanel extends JPanel{
 
 	public void markAttackable() {
     	this.setBackground(Color.RED);
-		this.setState(ATTACKBLE_SQUARE);
+		this.setState(PanelState.SQUARE_ATTACKABLE);
 		this.setTransparent((float) 0.5);
 		this.repaint();
 		
