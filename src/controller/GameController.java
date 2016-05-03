@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -8,6 +10,7 @@ import javax.swing.JFrame;
 import model.Game;
 import view.GameGUI;
 /* implements WindowsListner to launch initialization of MVC binds*/
+import view.SettingMenuWindow;
 
 public class GameController implements WindowListener{
 
@@ -23,7 +26,7 @@ public class GameController implements WindowListener{
 	public void setView(GameGUI frame){
 		this.gameGUI = frame;
 	}
-	
+
 	@Override
 	public void windowOpened(WindowEvent e) {
 		int boardHight = game.getBoardDimensionHeight();
@@ -37,6 +40,25 @@ public class GameController implements WindowListener{
 		this.game.startOneTurn();
 		
 		this.addBoardController();
+		this.addMenuItemControllers();
+	}
+	
+	private void addMenuItemControllers() {
+		this.gameGUI.addMenuSettingItemController(new MenuSettingListener());
+	}
+
+	private class MenuSettingListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			SettingMenuWindow sw = new SettingMenuWindow();
+			  GameSetController gc = new GameSetController();
+			  gc.setGameModel(game);
+			  gc.setGameView(gameGUI);
+			  gc.setSettingView(sw);
+			  sw.addSettingOKButtonListener(gc);
+		}
+		
 	}
 
 	private void addBoardController() {

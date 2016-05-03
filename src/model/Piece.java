@@ -20,6 +20,10 @@ public class Piece extends SquareComponent{
 		this.atkrange = atkrange;
 	}
 	
+	public void setHP(int hp){
+		this.healthPoint = hp;
+	}
+	
 	public String getPieceClassString(){
 		return this.pclass.toString();
 	}

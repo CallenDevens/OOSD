@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import controller.BoardController;
+import controller.GameSetController;
 import model.Board;
 import model.Game;
 import model.Piece;
@@ -36,6 +39,7 @@ public class GameGUI extends JFrame{
 	
 	private JMenuBar menuBar;
 	private JMenu menu, submenu;
+	JMenuItem setItem = new JMenuItem("settings..");
 	
 	public BoardFramePanel getLayeredBoardPanel(){
 		return this.backPanel;
@@ -94,24 +98,26 @@ public class GameGUI extends JFrame{
 		
 		//Build the first menu.
 		menu = new JMenu("Game");
-		JMenu setMenu = new JMenu("Preferences");
+//		JMenu setMenu = new JMenu("Preferences");
 
 		menu.setMnemonic(KeyEvent.VK_A);
 		menuBar.add(menu);
 		
-		menuBar.add(setMenu);
-
 		//a group of JMenuItems
 		JMenuItem loadItem = new JMenuItem("load",KeyEvent.VK_T);
 		menu.add(loadItem);
 		
 		JMenuItem saveItem = new JMenuItem("save");
 		menu.add(saveItem);
+		
+		menu.add(setItem);		
 	}
 
 	public void addBoardListener(ComponentListener bController) {
 		this.backPanel.addBoardViewListener(bController);
-		
 	}
 
+	public void addMenuSettingItemController(ActionListener l) {
+		this.setItem.addActionListener(l);
+	}
 }

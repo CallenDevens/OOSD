@@ -8,20 +8,35 @@ import view.GameGUI;
 
 public class StartGame {
 
+	Game game;
+	GameGUI view;
+
 	public StartGame() {
-
-		//create Model and View
-		Game game 	= new Game();
-		GameGUI view 	= new GameGUI();
-				
+		game 	= new Game();
+		view 	= new GameGUI();
+		
+		game.initializeGame();
 		GameController gController = new GameController();
-
 		gController.setGameModel(game);
 		gController.setView(view);
 		
 		view.addWindowListener(gController);
 
 	} //end of StartGame()
+	
+	public StartGame(Game game) {
+		this.game = game;
+		
+		game.initializeGame();
+		view = new GameGUI();
+
+		GameController gController = new GameController();
+		gController.setGameModel(game);
+		gController.setView(view);
+		view.addWindowListener(gController);		
+	}
+
+	
 	
 	public static void main(String [] args){
 		StartGame sg = new StartGame();

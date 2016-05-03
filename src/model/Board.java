@@ -11,7 +11,6 @@ import java.util.Map;
 import utils.GameSetting;
 
 public class Board {
-	private static Board board = null;
 	private final int num = 3;
 	private Square[][] squares;
 	
@@ -21,19 +20,22 @@ public class Board {
 	private int turnCount = 0;
 	
 	private GameSetting settings = GameSetting.getInstance();
+	
+	private int boardHeight;
+	private int boardWidth;
+
+	/*
 	private int boardHeight = settings.getDimensionHeight();
 	private int boardWidth = settings.getDimensionWidth();
+	*/
 
 	//use singleton pattern to initialize board instance
 	//for there is only one board in a game
-	public static Board getInstance(){
-		if (board == null){
-			board = new Board();
-		}
-		return board;
-	}
 	
-	private Board(){
+	public Board(){
+		
+		boardHeight = settings.getDimensionHeight();
+		boardWidth = settings.getDimensionWidth();
 
 		squares = new Square[boardHeight][boardWidth];	
 		playerPieces = new HashMap<String, ArrayList<Piece>>();

@@ -121,10 +121,12 @@ public class BoardController implements ComponentListener{
 	 * add ActionListeners to all squares within the board view.
 	 */
 	private void initializeSquareActionListener(){
-		int size = board.getBoardHeight();
+		int d_height = board.getBoardHeight();
+		int d_width = board.getBoardWidth();
 		
-		for(int i = 0; i< size; i++){
-			for(int j =0; j< size; j++){
+		for(int i = 0; i< d_height; i++){
+			for(int j =0; j< d_width; j++){
+				
 				final int x = i;
 				final int y = j;
 				
@@ -196,7 +198,6 @@ public class BoardController implements ComponentListener{
 					return;
 				}
 			}
-			
 		}
 
 		@Override
@@ -338,7 +339,7 @@ public class BoardController implements ComponentListener{
 			
 			BasicPanel square = boardView.getSubComponent(x, y);
 			
-			if(((SquarePanel) square).getState() == PanelState.PIECE_NON_CHOSEN){
+			if(square.getState() == PanelState.PIECE_NON_CHOSEN){
 				int distance = board.getPieceByXandY(x, y).getMovableDistance();
 				boardView.setChosenPiece(x, y, distance);
 				boardView.setState(PanelState.BOARD_WAIT_FOR_MOVE);

@@ -37,7 +37,7 @@ public abstract class BasicPanel extends JPanel{
 		this.repaint();
 	}
 	
-	protected PanelState getState() {
+	public PanelState getState() {
 		return null;
 	}
 

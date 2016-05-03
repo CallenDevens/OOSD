@@ -76,6 +76,7 @@ public class SquarePanel extends BasicPanel{
 
 	}
 
+	@Override
 	public PanelState getState() {
 		return this.state;
 	}
