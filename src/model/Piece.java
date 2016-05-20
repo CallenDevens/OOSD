@@ -9,6 +9,8 @@ public class Piece extends SquareComponent{
 		
 	private boolean movable = false;
 	private PieceClass pclass;
+	
+	private PieceState state;
 
 	public Piece(PieceClass pclass, int atk,int health, int agility, int atkrange,int posX, int posY){
 		super(posX, posY);
@@ -18,6 +20,10 @@ public class Piece extends SquareComponent{
 		this.healthPoint = health;
 		this.agility = agility;
 		this.atkrange = atkrange;
+	}
+	
+	public void SetState(PieceState s){
+		this.state = s;
 	}
 	
 	public void setHP(int hp){
@@ -50,7 +56,12 @@ public class Piece extends SquareComponent{
 	}
 	
 	public void getHurt(int damage){
-		this.healthPoint -=damage;
+		if(this.state == null){
+			this.healthPoint -=damage;
+		}
+		else{
+			this.state.getHurt(damage);
+		}
 	}
 	
 	public boolean isAlive(){
@@ -58,7 +69,12 @@ public class Piece extends SquareComponent{
 	}
 
 	public int getPower() {
-		return this.attack;
+		if(state == null){
+			return this.attack;
+		}
+		else{
+			return this.state.getPower();
+		}
 	}
 	
 	public int getAttackRange() {
@@ -66,18 +82,55 @@ public class Piece extends SquareComponent{
 	}
 
 	public PieceClass getPieceClass() {
-		// TODO Auto-generated method stub
 		return this.pclass;
 	}
 
 	public int getHealthyPoint() {
-		// TODO Auto-generated method stub
 		return this.healthPoint;
 	}
 	
 	public int getMoveRange(){
 		return this.atkrange;
 	}
+
+	public void changeHP(int amount) {
+		this.healthPoint = this.healthPoint + amount;
+	}
+
+	public void changeATK(int amount) {
+		this.attack = this.attack + amount;
+		
+	}
+
+	public void setAtk(int hp) {
+		this.attack = hp;
+	}
 	
+	public class AttackState implements PieceState{
+
+		@Override
+		public int getPower() {
+			return attack*2;
+
+		}
+
+		@Override
+		public void getHurt(int damage) {
+		     healthPoint -= 2*damage;
+		}
+	}
 	
+	public class DefensiveState implements PieceState{
+
+		@Override
+		public int getPower() {
+			return attack/2;
+		}
+
+		@Override
+		public void getHurt(int damage) {
+		     healthPoint -= damage/2;
+		}
+		
+	}
 }

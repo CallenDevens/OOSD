@@ -41,7 +41,7 @@ public class SquareComponentInfoPanel extends BasicPanel{
 		boxV1.add(jobLabel);
 		
 		/**create box V2*/
-		icon = resizeImage(new ImageIcon(imageAddress));
+		icon = new ImageIcon(resizeImage(new ImageIcon(imageAddress)));
 		imageIcon.setIcon(icon);
 		boxC1 = Box.createVerticalBox();
 		boxC1.add(imageIcon);
@@ -90,12 +90,6 @@ public class SquareComponentInfoPanel extends BasicPanel{
 		
 	}
 	
-	private ImageIcon resizeImage(ImageIcon oldImage){
-		Image img = oldImage.getImage();
-		Image newimg = img.getScaledInstance(60, 60,java.awt.Image.SCALE_SMOOTH ) ; 
-		return new ImageIcon(newimg);
-	}
-	
 	public void setJobLabel(String s)
 	{
 		jobLabel.setText(s);
@@ -103,7 +97,7 @@ public class SquareComponentInfoPanel extends BasicPanel{
 	
 	public void setImageIcon(String s)
 	{
-		ImageIcon imageIcon = this.resizeImage(new ImageIcon("image/icons/"+s));
+		ImageIcon imageIcon = new ImageIcon(resizeImage(new ImageIcon("image/icons/"+s)));
 		this.imageIcon.setIcon(imageIcon);
 		this.imageIcon.repaint();
 	}
@@ -126,5 +120,12 @@ public class SquareComponentInfoPanel extends BasicPanel{
 	public void setDescriptionLabel(String s)
 	{
 		description.setText(s);
+	}
+
+	@Override
+	public void moveAndShowUp(int posX, int posY) {
+		this.setLocation((posY)*50, (posX+1)*50);
+		this.setVisible(true);
+		this.repaint();
 	}
 }

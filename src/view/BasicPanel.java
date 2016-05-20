@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -31,18 +33,22 @@ public abstract class BasicPanel extends JPanel{
         graphics2d.dispose();  
     } 
     
-	public void moveAndShowUp(int posX, int posY) {
-		this.setLocation((posY)*50, (posX+1)*50);
-		this.setVisible(true);
-		this.repaint();
+    public abstract void moveAndShowUp(int posX, int posY);
+	
+	protected Image resizeImage(ImageIcon oldImage){
+		Image img = oldImage.getImage();
+		Image newimg = img.getScaledInstance(56, 56,java.awt.Image.SCALE_SMOOTH ) ; 
+		return newimg;
+
 	}
+
 	
 	public PanelState getState() {
 		return null;
 	}
 
 	
-	protected BasicPanel getSubComponent(){
+	public BasicPanel getSubComponent(){
 		return null;
 	}
 	

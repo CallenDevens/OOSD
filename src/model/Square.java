@@ -4,8 +4,8 @@ public class Square {
 	private int posX;
 	private int posY;
 	
-	private SquareComponent pieceholder;
-	
+	private Piece pieceholder;
+
 	public Square(int x, int y){
 		this.posX = x;
 		this.posY = y;
@@ -20,29 +20,21 @@ public class Square {
 		this.pieceholder = p;
 	}
 	
-	public void setSquareEmpty(){
+
+	
+	public void removePiece(){
 		this.pieceholder = null;
 	}
 	
-	public boolean isSquareOccupied(){
-		return this.pieceholder!=null;
+	public boolean isFilled(){
+		return pieceholder !=null;
 	}
 
-	
 	public Piece getPiece(){
 		if(pieceholder!=null && pieceholder.getClass().equals(Piece.class)){
 			return (Piece) this.pieceholder;
 		}else{
 			return null;
-		}
-	}
-	
-	public void display() {
-		if(pieceholder== null){
-			System.out.printf( "%-6s","n");
-		}
-		else if (pieceholder.getClass().equals(Piece.class)){
-			System.out.print(((Piece)pieceholder).getPieceClassString()+" ");
 		}
 	}
 }

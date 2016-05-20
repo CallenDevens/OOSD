@@ -75,7 +75,7 @@ public class Board {
 	public Square getSquare(int x, int y) {
 		return this.squares[x][y];
 	}
-
+/*
 	public void display() {
 		for(int i = 0; i < this.boardHeight; i++){
 			for(int j = 0; j < this.boardWidth; j++){
@@ -86,7 +86,7 @@ public class Board {
 			System.out.println("o");
 		}
 	}
-
+*/
 	public void setPieceforPlayer(String playerName, PieceClass[] p1Pieces, int posY) {
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		playerPieces.put(playerName, pieces);
@@ -113,7 +113,6 @@ public class Board {
 
 	public void switchActivePieces() {
 		int playerID = (turnCount++)%2 +1;
-//		String playerName = "p2";
 
 		String playerName = "p"+ playerID;
 		
@@ -139,10 +138,11 @@ public class Board {
 		return squares[x][y].getPiece()!=null;
 	}
 
+
 	public void movePieceFromTo(int pieceX, int pieceY, int x, int y) {
 		Piece p = this.getPieceByXandY(pieceX, pieceY);
 		p.moveTo(x, y);
-		this.getSquare(pieceX, pieceY).setSquareEmpty();
+		this.getSquare(pieceX, pieceY).removePiece();;
 		this.setPiece(x, y, p);
 	}
 
@@ -152,6 +152,13 @@ public class Board {
 		
 		pb.getHurt(pa.getPower());
 		
+		if(pb.getHealthyPoint() <= 0){
+			this.squares[bPosX][bPosY].removePiece();
+	//		System.out.println("remove " + bPosX+ " ," +bPosY);
+		}else{
+		}
+		
+		
 	}
 
 	public int getBoardHeight() {
@@ -160,5 +167,9 @@ public class Board {
 
 	public int getBoardWidth() {
 		return this.boardWidth;
+	}
+
+	public void setRandomItems() {
+		
 	}
 }

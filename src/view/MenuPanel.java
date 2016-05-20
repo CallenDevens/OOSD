@@ -117,5 +117,12 @@ public class MenuPanel extends BasicPanel{
 		
 	}
 
+	@Override
+	public void moveAndShowUp(int posX, int posY) {
+		this.setLocation((posY)*50, (posX+1)*50);
+		this.setVisible(true);
+		this.repaint();
+	}
+
 
 }

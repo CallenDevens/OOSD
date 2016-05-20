@@ -18,7 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class SquarePanel extends BasicPanel{	
-    private JButton pieceButton;
+//    private JButton pieceButton;
+	
+	private SquareComponentPanel scp;
+	
     private int posX;
     private int posY;
     
@@ -30,7 +33,7 @@ public class SquarePanel extends BasicPanel{
     	this.setMinimumSize(new Dimension(60, 60));
     	this.setPreferredSize(getSize());
     	
-    	pieceButton = null;
+ //   	pieceButton = null;
  //   	this.state = EMPTY_SQUARE;
     	
     	this.setState(PanelState.SQUARE_EMPTY);
@@ -39,43 +42,54 @@ public class SquarePanel extends BasicPanel{
         this.setBorder(BorderFactory.createEtchedBorder());
     }
     
-    public JButton getClickablePiece(){
-    	return this.pieceButton;
-    }
-
-	public boolean isPiece() {
-		return pieceButton!=null;
+    @Override
+	public BasicPanel getSubComponent(){
+    	return this.scp;
 	}
+
+    
+    public BasicPanel getSquareComponentView(){
+    	return this.scp;
+    }
+    
+	public boolean containsPiece() {
+		return (this.getState() == PanelState.PIECE_CHOSEN || this.getState() == PanelState.PIECE_NON_CHOSEN);
+	}
+	
+	public boolean containsItem() {
+		return (this.getState() == PanelState.ITEM_UNVISITED);
+	}
+
+	
+	/*
 	
 	public void addPiece(JButton p){
 		this.pieceButton = p;
 		this.add(p);
 		this.setState(PanelState.PIECE_NON_CHOSEN);
-	}
+	}*/
 	
-	public void setPiece(String string) {
-		pieceButton = new JButton();
-		pieceButton.setPreferredSize(new Dimension(38,38));
-		pieceButton.setMinimumSize(new Dimension(38, 38));
-		pieceButton.setMaximumSize(new Dimension(38, 38));
 
-		ImageIcon imageIcon = this.resizeImage(new ImageIcon("image/icons/"+string));
-		
-		pieceButton.setIcon(imageIcon);
-		
+	
+	@Override
+	public void addComponent(BasicPanel p){
+		this.scp = (SquareComponentPanel) p;
+		this.add(scp);
 		this.setState(PanelState.PIECE_NON_CHOSEN);
-		this.add(pieceButton);
+		this.repaint();
+	}
+
+	
+	public void setPiece(String pClass) {
+		this.scp = new SquareComponentPanel(pClass);		
+		this.setState(PanelState.PIECE_NON_CHOSEN);
+		
+		this.addComponent(scp);
+		
 		this.revalidate();
 		this.repaint();
 	}
 	
-	private ImageIcon resizeImage(ImageIcon oldImage){
-		Image img = oldImage.getImage();
-		Image newimg = img.getScaledInstance(56, 56,java.awt.Image.SCALE_SMOOTH ) ; 
-		return new ImageIcon(newimg);
-
-	}
-
 	@Override
 	public PanelState getState() {
 		return this.state;
@@ -84,13 +98,12 @@ public class SquarePanel extends BasicPanel{
 	public void setState( PanelState state){
 		this.state = state;
 	}
-
 	
 	public void clean() {
 		this.setTransparent(0);
 		this.setBackground(Color.YELLOW);
 		
-		if(this.pieceButton!=null){
+		if(this.containsPiece()){
 			this.setState(PanelState.PIECE_NON_CHOSEN);
 		}
 		else{
@@ -102,19 +115,21 @@ public class SquarePanel extends BasicPanel{
 	}
 	
 	
-	public JButton removePieceButton(){
-		JButton p = this.pieceButton;
-		if(this.pieceButton!=null){
+	public BasicPanel removeSquareComponent(){
+		BasicPanel p = this.scp;
+		if(this.scp!=null){
 			this.removeAll();;
-			pieceButton = null;
+			this.scp = null;
 		}
 		this.setState(PanelState.SQUARE_EMPTY);;
+		this.repaint();
 		return p;
 	}
 
 	public void markMovable() {
-		//this.setOpaque(true);
-		this.setState(PanelState.SQUARE_MOVABLE);
+		if(this.scp == null){
+			this.setState(PanelState.SQUARE_MOVABLE);
+		}
 		this.setTransparent((float) 0.5);
 		this.repaint();
 
@@ -146,8 +161,14 @@ public class SquarePanel extends BasicPanel{
 	public void markAttackable() {
     	this.setBackground(Color.RED);
 		this.setState(PanelState.SQUARE_ATTACKABLE);
+		
 		this.setTransparent((float) 0.5);
-		this.repaint();
+		this.repaint();		
+	}
+
+	@Override
+	public void moveAndShowUp(int posX, int posY) {
+		// TODO Auto-generated method stub
 		
 	} 
 }

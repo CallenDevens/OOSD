@@ -1,28 +1,15 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout.Constraints;
-
-import model.Board;
-import model.Piece;
-import model.PieceClass;
 
 public class BoardPanel extends BasicPanel{
 	
@@ -34,7 +21,7 @@ public class BoardPanel extends BasicPanel{
 	private int activePiecePosX = -1;
 	private int activePiecePosY = -1;
 
-	public Image imgBackground = null;
+	private Image imgBackground = null;
 
     @Override
 	protected void paintComponent(Graphics g) {
@@ -85,6 +72,8 @@ public class BoardPanel extends BasicPanel{
 		this.setSize(60*width, 60*height);
 		this.setMinimumSize(getSize());
 		this.setPreferredSize(getSize());
+		
+		this.setState(PanelState.BOARD_START_NEW_TURN);
 	}
 
 	public void initBoard() {
@@ -108,8 +97,8 @@ public class BoardPanel extends BasicPanel{
 	}
     
 	protected  void markMovableArea(int x, int y, int distance) {
-		for(int i = 0; i < grids.length; i++){
-			for(int j = 0; j < grids.length; j++){
+		for(int i = 0; i < dimension_height; i++){
+			for(int j = 0; j < dimension_width; j++){
 				if((i-j >= ((x-y)-distance)) && (i - j <= (distance+(x-y)))){
 					if((i+j >=(x+y-distance))&&(i+j <= (x + y + distance)))
 						this.grids[i][j].markMovable();
@@ -131,7 +120,7 @@ public class BoardPanel extends BasicPanel{
 		return grids[i][j].isMovable();
 	}
 	
-	public void setChosenPiece(int x, int y, int distance) {
+	public void setChosenPieceMovableArea(int x, int y, int distance) {
 		this.activePiecePosX = x;
 		this.activePiecePosY = y;
 		grids[x][y].setState(PanelState.PIECE_CHOSEN);
@@ -164,10 +153,11 @@ public class BoardPanel extends BasicPanel{
 		 this.repaint();
 	}
 
-	public void addPieceOn(JButton piece, int x, int y) {
-		this.grids[x][y].addPiece(piece);
-		
+	
+	public void addPieceOn(BasicPanel bp, int x, int y) {
+		this.grids[x][y].addComponent(bp);
 	}
+	
 
 	public void setPieceOnBoard(String imgName,int x, int y) {
 		this.grids[x][y].setPiece(imgName);
@@ -182,7 +172,16 @@ public class BoardPanel extends BasicPanel{
     	this.repaint();
 	}
 
-	public JButton removePieceOn(int pieceX, int pieceY) {
-		return grids[pieceX][pieceY].removePieceButton();
+	
+	public BasicPanel removePieceOn(int pieceX, int pieceY) {
+		return grids[pieceX][pieceY].removeSquareComponent();
 	}
+
+	@Override
+	public void moveAndShowUp(int posX, int posY) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

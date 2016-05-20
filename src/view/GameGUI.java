@@ -41,6 +41,8 @@ public class GameGUI extends JFrame{
 	private JMenu menu, submenu;
 	JMenuItem setItem = new JMenuItem("settings..");
 	
+	private int bHeight, bWidth;
+	
 	public BoardFramePanel getLayeredBoardPanel(){
 		return this.backPanel;
 	}
@@ -60,35 +62,38 @@ public class GameGUI extends JFrame{
 		mainPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		
 		recordPanel.setSize(300, 500);
-		mainPanel.setSize(660+300, 660+200);
+		mainPanel.setSize(bWidth*60+300, bHeight*60+200);
+		
 		mainPanel.setMinimumSize(mainPanel.getSize());
 		mainPanel.setPreferredSize(mainPanel.getSize());
 		
 		this.recordPanel.add(new JButton("button"));
 		
-//		backPanel = new BoardFramePanel(bPanel);
-
 		backPanel = new BoardFramePanel(bHeight,bWidth);
-
 		backPanel.setVisible(true);
-
+		
 		mainPanel.add(backPanel);		
 		recordPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		
 		mainPanel.add(recordPanel);
 		this.getContentPane().add(mainPanel);
+		
 	}
 	
-	public GameGUI(){		
+	public GameGUI(int bWidth, int bHeight){		
 		this.initializeMenu();
 		this.setJMenuBar(menuBar);
+
+		this.bHeight = bHeight;
+		this.bWidth = bWidth;
+		this.setSize(bWidth*60+300, bHeight*60+40);
+		this.setMinimumSize(getSize());
+		this.setPreferredSize(getSize());
+		this.repaint();
 
 		this.setTitle("Game");  
 //		this.setLocation(300, 200);  
 		this.setResizable(false);
-		this.setSize(660+300, 660+40);
-		this.setMinimumSize(getSize());
-		this.setPreferredSize(getSize());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		this.setVisible(true);
 	}

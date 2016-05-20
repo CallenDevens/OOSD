@@ -21,8 +21,7 @@ public class LinerAttackPiece extends AbstractAttackPieceDecorator{
 		int y = piece.getPosY();
 				
 		for(int i = 1; i<=range; i++){
-			
-			if(x+i<dimension_width){
+			if(x+i<dimension_height){
 				Coordinate c1 = new Coordinate(x+i, y);
 				coorList.add(c1);
 			}
@@ -31,7 +30,7 @@ public class LinerAttackPiece extends AbstractAttackPieceDecorator{
 				Coordinate c2 = new Coordinate(x-i, y);
 				coorList.add(c2);
 			}
-			if(y+i<dimension_height){
+			if(y+i<dimension_width){
 				Coordinate c3 = new Coordinate(x, y+i);
 				coorList.add(c3);
 			}

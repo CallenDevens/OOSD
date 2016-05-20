@@ -13,9 +13,13 @@ public class StartGame {
 
 	public StartGame() {
 		game 	= new Game();
-		view 	= new GameGUI();
-		
 		game.initializeGame();
+
+		int bWidth = game.getBoardDimensionWidth();
+		int bHeight = game.getBoardDimensionHeight();
+		view 	= new GameGUI(bWidth, bHeight);
+
+		
 		GameController gController = new GameController();
 		gController.setGameModel(game);
 		gController.setView(view);
@@ -28,7 +32,9 @@ public class StartGame {
 		this.game = game;
 		
 		game.initializeGame();
-		view = new GameGUI();
+		int bWidth = game.getBoardDimensionWidth();
+		int bHeight = game.getBoardDimensionHeight();
+		view 	= new GameGUI(bWidth, bHeight);
 
 		GameController gController = new GameController();
 		gController.setGameModel(game);

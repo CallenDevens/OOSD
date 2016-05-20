@@ -50,19 +50,6 @@ public class GameSetting {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File("setting")));
 			
-			/*
-			 String line1= br.readLine();
-			 
-			System.out.println(line1);
-			
-			String line2= br.readLine();
-			System.out.println(line2);
-			
-			this.board_height = Integer.parseInt(line1);
-			this.board_width = Integer.parseInt(line2);
-			*/
-
-			
 			this.board_height = Integer.parseInt(br.readLine());
 			this.board_width = Integer.parseInt(br.readLine());
 			
