@@ -1,13 +1,13 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Map;
-
-import utils.GameSetting;
+import model.command.CommandStack;
 
 public class Game {
 	public static Board board;
 	public static ArrayList<Player> players = new ArrayList<Player>();
+	
+	private CommandStack cs = new CommandStack();
 		
 	private PieceClass [] p1Pieces = {PieceClass.MAGE, PieceClass.WARRIOR, PieceClass.HUNTER};
 	private PieceClass [] p2Pieces = {PieceClass.ROGUE, PieceClass.PALADIN, PieceClass.PRISST};
@@ -16,14 +16,21 @@ public class Game {
 		//initializeGame();
 	}
 	
+	public Player getActivePlayer(){
+		return board.getActivePlayer();
+	}
+	
 	public void initializeGame(){
 		
 		board = new Board();
 		Player p1 = new Player("p1");
 		Player p2 = new Player("p2");
 		
-		board.setPieceforPlayer(p1.getPlayerName(),p1Pieces,0);
-		board.setPieceforPlayer(p2.getPlayerName(),p2Pieces,board.getBoardWidth()-1);
+		players.add(p1);
+		players.add(p2);
+		
+		board.setPieceforPlayer(p1,p1Pieces,0);
+		board.setPieceforPlayer(p2,p2Pieces,board.getBoardWidth()-1);
 		
 	}
 
@@ -34,7 +41,7 @@ public class Game {
 	public int getBoardDimensionHeight(){
 		return board.getBoardHeight();
 	}
-	public static Board getBoard(){
+	public Board getBoard(){
 		return board;
 	}
 	
@@ -53,5 +60,13 @@ public class Game {
 
 	public ArrayList<Piece> getActivePieces() {
 		return board.getActivePieces();
+	}
+
+	public CommandStack getCommandStack() {
+		return this.cs;
+	}
+
+	public void markTurnUndo() {
+		board.markActivePlayerTurnUndo();
 	}
 }

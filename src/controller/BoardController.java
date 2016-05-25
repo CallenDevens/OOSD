@@ -14,6 +14,10 @@ import model.Coordinate;
 import model.DecoratedPieceProducer;
 import model.Piece;
 import model.SquareComponent;
+import model.command.AttackCommand;
+import model.command.Command;
+import model.command.CommandStack;
+import model.command.MoveCommand;
 import view.BasicPanel;
 import view.BoardFramePanel;
 import view.BoardPanel;
@@ -35,13 +39,15 @@ public class BoardController implements ComponentListener{
 	private Board board = null;
 	private BoardPanel boardView = null;
 	private BoardFramePanel backPanel = null;
+	private CommandStack commStack;
 		
 	public void setBackPanel(BoardFramePanel pane){
 		this.backPanel = pane;
 	}
 	
-	public void setModel(Board b){
+	public void setModel(Board b, CommandStack cs){
 		this.board = b;
+		this.commStack = cs;
 	}
 	
 	public void setView(BoardPanel bp){
@@ -79,12 +85,21 @@ public class BoardController implements ComponentListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int x = boardView.getActivePiecePosX();
-				int y = boardView.getActivePiecePosY();					
-				board.getPieceByXandY(x, y).SetState(null);
-				
+				int y = boardView.getActivePiecePosY();		
 				board.switchActivePieces();
 				backPanel.enableMenuMove();
-				backPanel.setMenuVisisble(false);				
+				backPanel.setMenuVisisble(false);
+				boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
+
+			}
+		});
+		
+		this.backPanel.addMenuCancelActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boardView.setState(PanelState.BOARD_NO_MENU_SHOWN);
+
 			}
 		});
 		
@@ -99,8 +114,7 @@ public class BoardController implements ComponentListener{
 					Piece p = board.getPieceByXandY(x, y);
 					p.SetState(p.new AttackState());
 					backPanel.moveAndShowPieceMenu(x, y);
-					
-					boardView.setState(PanelState.BOARD_WAIT_ACTION);
+					boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
 
 				}	
 		});
@@ -116,13 +130,12 @@ public class BoardController implements ComponentListener{
 					Piece p = board.getPieceByXandY(x, y);
 					p.SetState(p.new DefensiveState());
 					backPanel.moveAndShowPieceMenu(x, y);
-					boardView.setState(PanelState.BOARD_WAIT_ACTION);
+					boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
 				}	
 		});
 
 		
 		this.backPanel.addModelListener("NORMAL MODEL", new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					backPanel.setStateMenuInvisible();
@@ -130,14 +143,14 @@ public class BoardController implements ComponentListener{
 					int y = boardView.getActivePiecePosY();					
 					board.getPieceByXandY(x, y).SetState(null);
 					backPanel.moveAndShowPieceMenu(x, y);
-					boardView.setState(PanelState.BOARD_WAIT_ACTION);
+					boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
 				}	
 		});
 		
 		this.backPanel.addModelListener("CANCEL", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				boardView.setState(PanelState.BOARD_START_NEW_TURN);
+				boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
 			}	
 		});
 
@@ -160,7 +173,7 @@ public class BoardController implements ComponentListener{
     	for(Piece p: pieces){
     		int x = p.getPosX();
     		int y = p.getPosY();
-    		boardView.setPieceOnBoard(p.getPieceClass().toString()+".png", x, y);
+    		boardView.setPieceOnBoard(p.getPieceClass().toString(), x, y);
     	}
 	}//End of setPieces()
 	
@@ -209,49 +222,38 @@ public class BoardController implements ComponentListener{
 			int y = p.getPosY();
 			
 			if(board.getPieceByXandY(x, y).isMovable()){
-				
 				//keep other pieces from moving in a single round
-				if(!backPanel.menuMoveEnabled() && !boardView.isActivePice(x, y)){
-					
+				if(boardView.getState()!=PanelState.BOARD_STATE_UNCERTAIN && !boardView.isActivePice(x, y)){
+					return;
 				}
 				
 				else{
-					if(boardView.getState() == PanelState.BOARD_START_NEW_TURN){
+					if(boardView.getState() == PanelState.BOARD_STATE_UNCERTAIN){
 						backPanel.moveAndShowStateMenu(x, y);
 						boardView.setActivePieceCoordinates(x, y);
+						
+//						System.out.println(x+"," +y);
 						boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
 					}
-					else if(boardView.getState() == PanelState.BOARD_WAIT_ACTION){
+					else if(boardView.getState() == PanelState.BOARD_NO_MENU_SHOWN){
 						backPanel.moveAndShowPieceMenu(x, y);
 						boardView.setActivePieceCoordinates(x, y);
-
 					}
 				}
 			}
 			else{
+				//Select attacked piece( not movable)
 				if(boardView.getState() == PanelState.BOARD_WAITING_FOR_ATTACK){
 					if(boardView.isBoardPieceChoosen()){
+						//there is active attacking piece
 						int attackingPiecePosX = boardView.getActivePiecePosX();
 						int attackingPiecePosY = boardView.getActivePiecePosY();
 						
-						board.attackFromAtoB(attackingPiecePosX, attackingPiecePosY, x, y);
-						
-						if(!board.isPiece(x, y)){
-							boardView.removePieceOn(x, y);
-							boardView.repaint();
-						}
-						board.getPieceByXandY(attackingPiecePosX, attackingPiecePosY).SetState(null);
-						
-						boardView.resetPieceMoveState();						
-						boardView.cleanAllSquares();
-
-						boardView.repaint();
-						board.switchActivePieces();
-				    	backPanel.getMenuPane().enableMove();
-
+						//board.attackFromAtoB(attackingPiecePosX, attackingPiecePosY, x, y);
+						Command atkCommand = new AttackCommand(board, backPanel,attackingPiecePosX, attackingPiecePosY, x, y);
+						atkCommand.execute();
+						commStack.pushCommand(atkCommand);
 					}
-					backPanel.setPieceMenuInvisible();
-					boardView.resetPieceMoveState();
 				}
 				else if(boardView.getState() == PanelState.BOARD_WAIT_FOR_MOVE){
 					return;
@@ -325,33 +327,29 @@ public class BoardController implements ComponentListener{
 				 * */
 				if(board.getPieceByXandY(x, y)==null){
 					boardView.cleanAllSquares();
-					backPanel.getMenuPane().moveAndShowUp(x, y);
+					boardView.setState(PanelState.BOARD_NO_MENU_SHOWN);
+					return;
 				}
-			}
-	
-			if(!bp.isMovableSquare(x,y)){
-				backPanel.setPieceMenuInvisible();
+			}else if(boardView.getState() == PanelState.BOARD_STATE_MENU_SHOWN){
+				backPanel.setPieceStateMenuInvisible();
+				boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
 				return;
-			}else if(bp.isBoardPieceChoosen()){
+			}else if(boardView.getState() == PanelState.BOARD_MENU_SHOWN){
+				backPanel.setPieceMenuInvisible();
+				boardView.setState(PanelState.BOARD_NO_MENU_SHOWN);
+				return;
+			}
+			else if(bp.isBoardPieceChoosen()){
 				if(boardView.getState() == PanelState.BOARD_WAIT_FOR_MOVE){
 					int pieceX = bp.getActivePiecePosX();
 					int pieceY = bp.getActivePiecePosY();
 					
-					//change model
-					board.movePieceFromTo(pieceX, pieceY, x, y);
-					
-					//change view
-					bp.setActivePieceCoordinates(x, y);
-										
-					BasicPanel piece = boardView.removePieceOn(pieceX,pieceY);
-					if(piece == null){
+					if(!boardView.isMovableSquare(x, y)){
+						return;
 					}
-					boardView.addPieceOn(piece, x, y);
-					
-					backPanel.moveAndShowPieceMenu(x, y);
-				    backPanel.disableMenuMove();
-				    
-					boardView.cleanAllSquares();
+					Command moveCom = new MoveCommand(board,backPanel, pieceX, pieceY, x, y);
+					moveCom.execute();
+					commStack.pushCommand(moveCom);
 			    }
 			}	
 		}

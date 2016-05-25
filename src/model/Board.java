@@ -14,8 +14,11 @@ public class Board {
 	private final int num = 3;
 	private Square[][] squares;
 	
-	private static Map<String, ArrayList<Piece>> playerPieces;
-	private static ArrayList<Piece> activePlayerPieces = null;
+	private static Map<String,Player> players = new HashMap<String, Player>();
+	private static Map<String, ArrayList<Piece>> playerPieces = new HashMap<String, ArrayList<Piece>>();
+	private ArrayList<Piece> activePlayerPieces = null;
+	
+	private Player activePlayer;
 	
 	private int turnCount = 0;
 	
@@ -23,6 +26,11 @@ public class Board {
 	
 	private int boardHeight;
 	private int boardWidth;
+	private boolean undoFlag = false;
+	
+	public Player getActivePlayer(){
+		return this.activePlayer;
+	}
 
 	/*
 	private int boardHeight = settings.getDimensionHeight();
@@ -38,7 +46,6 @@ public class Board {
 		boardWidth = settings.getDimensionWidth();
 
 		squares = new Square[boardHeight][boardWidth];	
-		playerPieces = new HashMap<String, ArrayList<Piece>>();
 		initSquares();
 	}
 
@@ -50,7 +57,7 @@ public class Board {
 		}
 	}
 	
-	public static ArrayList<Piece> getPieces(){
+	public ArrayList<Piece> getPieces(){
 		ArrayList<Piece> allPieces = new ArrayList<Piece>();
 		for(Map.Entry<String, ArrayList<Piece>> entry : playerPieces.entrySet()){		
 			allPieces.addAll(entry.getValue());
@@ -75,21 +82,11 @@ public class Board {
 	public Square getSquare(int x, int y) {
 		return this.squares[x][y];
 	}
-/*
-	public void display() {
-		for(int i = 0; i < this.boardHeight; i++){
-			for(int j = 0; j < this.boardWidth; j++){
-				if(this.getSquare(i, j)!=null){
-				    this.getSquare(i, j).display();
-				}
-			}
-			System.out.println("o");
-		}
-	}
-*/
-	public void setPieceforPlayer(String playerName, PieceClass[] p1Pieces, int posY) {
+
+	public void setPieceforPlayer(Player p1, PieceClass[] p1Pieces, int posY) {
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
-		playerPieces.put(playerName, pieces);
+		playerPieces.put(p1.getPlayerName(), pieces);
+		players.put(p1.getPlayerName(), p1);
 
 		int j = 0;
 		for(int i = 0; i < p1Pieces.length; i++){
@@ -112,9 +109,14 @@ public class Board {
 	}
 
 	public void switchActivePieces() {
-		int playerID = (turnCount++)%2 +1;
+		if(undoFlag){
+			this.getActivePlayer().banUndo();
+			undoFlag = false;
+		}
 
+		int playerID = (turnCount++)%2 +1;
 		String playerName = "p"+ playerID;
+		activePlayer = players.get(playerName);
 		
 		for(Map.Entry<String, ArrayList<Piece>> entry : playerPieces.entrySet()){
 			if(entry.getKey().equals(playerName)){
@@ -128,6 +130,7 @@ public class Board {
 				}
 			}
 		}
+		
 	}
 
 	public ArrayList<Piece> getActivePieces() {
@@ -154,7 +157,6 @@ public class Board {
 		
 		if(pb.getHealthyPoint() <= 0){
 			this.squares[bPosX][bPosY].removePiece();
-	//		System.out.println("remove " + bPosX+ " ," +bPosY);
 		}else{
 		}
 		
@@ -169,7 +171,7 @@ public class Board {
 		return this.boardWidth;
 	}
 
-	public void setRandomItems() {
-		
+	public void markActivePlayerTurnUndo() {
+		this.undoFlag  = true;
 	}
 }

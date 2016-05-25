@@ -25,6 +25,7 @@ import javax.swing.border.Border;
 
 import controller.BoardController;
 import controller.GameSetController;
+import controller.UndoController;
 import model.Board;
 import model.Game;
 import model.Piece;
@@ -39,7 +40,10 @@ public class GameGUI extends JFrame{
 	
 	private JMenuBar menuBar;
 	private JMenu menu, submenu;
+	
 	JMenuItem setItem = new JMenuItem("settings..");
+	JMenuItem undoItem = new JMenuItem("undo");
+
 	
 	private int bHeight, bWidth;
 	
@@ -92,7 +96,6 @@ public class GameGUI extends JFrame{
 		this.repaint();
 
 		this.setTitle("Game");  
-//		this.setLocation(300, 200);  
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		this.setVisible(true);
@@ -103,7 +106,6 @@ public class GameGUI extends JFrame{
 		
 		//Build the first menu.
 		menu = new JMenu("Game");
-//		JMenu setMenu = new JMenu("Preferences");
 
 		menu.setMnemonic(KeyEvent.VK_A);
 		menuBar.add(menu);
@@ -114,8 +116,8 @@ public class GameGUI extends JFrame{
 		
 		JMenuItem saveItem = new JMenuItem("save");
 		menu.add(saveItem);
-		
-		menu.add(setItem);		
+		menu.add(setItem);	
+		menu.add(undoItem);
 	}
 
 	public void addBoardListener(ComponentListener bController) {
@@ -124,5 +126,9 @@ public class GameGUI extends JFrame{
 
 	public void addMenuSettingItemController(ActionListener l) {
 		this.setItem.addActionListener(l);
+	}
+
+	public void addUndoController(ActionListener uc) {
+		this.undoItem.addActionListener(uc);
 	}
 }

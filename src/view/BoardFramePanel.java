@@ -192,4 +192,12 @@ public class BoardFramePanel extends JLayeredPane{
 		this.stateMenuView.getButtons().get(string).addActionListener(l);
 		
 	}
+	public void setPieceStateMenuInvisible() {
+		this.stateMenuView.setVisible(false);
+		
+	}
+	public void addMenuCancelActionListener(ActionListener l) {
+		this.pieceMenuView.addCancelButtonListener(l);
+		
+	}
 }

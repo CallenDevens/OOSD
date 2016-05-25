@@ -73,7 +73,7 @@ public class BoardPanel extends BasicPanel{
 		this.setMinimumSize(getSize());
 		this.setPreferredSize(getSize());
 		
-		this.setState(PanelState.BOARD_START_NEW_TURN);
+		this.setState(PanelState.BOARD_STATE_UNCERTAIN);
 	}
 
 	public void initBoard() {
@@ -105,7 +105,6 @@ public class BoardPanel extends BasicPanel{
 				}
 			}
 		}
-		
 	}
 
 	public void cancelHighlighted(){
@@ -182,6 +181,4 @@ public class BoardPanel extends BasicPanel{
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

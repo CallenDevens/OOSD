@@ -15,7 +15,7 @@ public class SquareComponentPanel extends BasicPanel{
     	this.setPreferredSize(new Dimension(38,38));
 		this.setMinimumSize(new Dimension(38, 38));
 		this.setMaximumSize(new Dimension(38, 38));
-		imgBackground  = this.resizeImage(new ImageIcon("image/icons/"+pClass));
+		imgBackground  = this.resizeImage(new ImageIcon("image/icons/"+pClass+".png"));
 		this.setVisible(true);		
 	}
 

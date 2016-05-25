@@ -110,27 +110,47 @@ public class Piece extends SquareComponent{
 
 		@Override
 		public int getPower() {
-			return attack*2;
-
+			return (int) (attack*1.1);
 		}
 
 		@Override
 		public void getHurt(int damage) {
-		     healthPoint -= 2*damage;
+		     healthPoint -= 1.1*damage;
 		}
+		
+
+		@Override
+		public void recoverHP(int damage) {
+			healthPoint += damage*1.1	;
+		}
+
 	}
 	
 	public class DefensiveState implements PieceState{
 
 		@Override
 		public int getPower() {
-			return attack/2;
+			return (int) (attack*0.8);
 		}
 
 		@Override
 		public void getHurt(int damage) {
-		     healthPoint -= damage/2;
+		     healthPoint -= damage*0.8;
+		}
+
+		@Override
+		public void recoverHP(int damage) {
+			healthPoint += damage*0.8	;		
 		}
 		
+	}
+
+	public void recoverHP(int damage) {
+		if(this.state == null){
+			this.healthPoint +=damage;
+		}
+		else{
+			this.state.recoverHP(damage);
+		}
 	}
 }

@@ -56,21 +56,6 @@ public class SquarePanel extends BasicPanel{
 		return (this.getState() == PanelState.PIECE_CHOSEN || this.getState() == PanelState.PIECE_NON_CHOSEN);
 	}
 	
-	public boolean containsItem() {
-		return (this.getState() == PanelState.ITEM_UNVISITED);
-	}
-
-	
-	/*
-	
-	public void addPiece(JButton p){
-		this.pieceButton = p;
-		this.add(p);
-		this.setState(PanelState.PIECE_NON_CHOSEN);
-	}*/
-	
-
-	
 	@Override
 	public void addComponent(BasicPanel p){
 		this.scp = (SquareComponentPanel) p;
@@ -103,7 +88,7 @@ public class SquarePanel extends BasicPanel{
 		this.setTransparent(0);
 		this.setBackground(Color.YELLOW);
 		
-		if(this.containsPiece()){
+		if(this.containsPiece()||(this.getState() == PanelState.SQUARE_ATTACKABLE && this.scp!=null)){
 			this.setState(PanelState.PIECE_NON_CHOSEN);
 		}
 		else{
@@ -161,14 +146,12 @@ public class SquarePanel extends BasicPanel{
 	public void markAttackable() {
     	this.setBackground(Color.RED);
 		this.setState(PanelState.SQUARE_ATTACKABLE);
-		
 		this.setTransparent((float) 0.5);
 		this.repaint();		
 	}
 
 	@Override
 	public void moveAndShowUp(int posX, int posY) {
-		// TODO Auto-generated method stub
 		
 	} 
 }

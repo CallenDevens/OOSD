@@ -22,7 +22,6 @@ public class MenuPanel extends BasicPanel{
 	private JButton cancelButton =new JButton("CANCEL");
 	
 	public MenuPanel(){
-		
 		this.setBackground(Color.BLACK);
 		this.setOpaque(false);
 		this.setTransparent((float) 0.7);
@@ -122,6 +121,11 @@ public class MenuPanel extends BasicPanel{
 		this.setLocation((posY)*50, (posX+1)*50);
 		this.setVisible(true);
 		this.repaint();
+	}
+
+	public void addCancelButtonListener(ActionListener l) {
+		this.cancelButton.addActionListener(l);
+		
 	}
 
 
