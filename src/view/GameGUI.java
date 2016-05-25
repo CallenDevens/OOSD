@@ -25,6 +25,8 @@ import javax.swing.border.Border;
 
 import controller.BoardController;
 import controller.GameSetController;
+import controller.LoadController;
+import controller.SaveController;
 import controller.UndoController;
 import model.Board;
 import model.Game;
@@ -35,7 +37,6 @@ public class GameGUI extends JFrame{
 	public static int squareSize = 40;
 	
 	private JPanel mainPanel = new JPanel();
-	private JPanel recordPanel = new JPanel();
 	private BoardFramePanel backPanel;
 	
 	private JMenuBar menuBar;
@@ -43,7 +44,8 @@ public class GameGUI extends JFrame{
 	
 	JMenuItem setItem = new JMenuItem("settings..");
 	JMenuItem undoItem = new JMenuItem("undo");
-
+	JMenuItem saveItem = new JMenuItem("save");
+	JMenuItem loadItem = new JMenuItem("load",KeyEvent.VK_T);
 	
 	private int bHeight, bWidth;
 	
@@ -65,21 +67,16 @@ public class GameGUI extends JFrame{
 		mainPanel.setLayout(fl);
 		mainPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		
-		recordPanel.setSize(300, 500);
-		mainPanel.setSize(bWidth*60+300, bHeight*60+200);
+		mainPanel.setSize(bWidth*60, bHeight*60);
 		
 		mainPanel.setMinimumSize(mainPanel.getSize());
 		mainPanel.setPreferredSize(mainPanel.getSize());
-		
-		this.recordPanel.add(new JButton("button"));
-		
+				
 		backPanel = new BoardFramePanel(bHeight,bWidth);
 		backPanel.setVisible(true);
 		
 		mainPanel.add(backPanel);		
-		recordPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		
-		mainPanel.add(recordPanel);
 		this.getContentPane().add(mainPanel);
 		
 	}
@@ -90,7 +87,7 @@ public class GameGUI extends JFrame{
 
 		this.bHeight = bHeight;
 		this.bWidth = bWidth;
-		this.setSize(bWidth*60+300, bHeight*60+40);
+		this.setSize(bWidth*60+25, bHeight*60+50);
 		this.setMinimumSize(getSize());
 		this.setPreferredSize(getSize());
 		this.repaint();
@@ -103,18 +100,13 @@ public class GameGUI extends JFrame{
 	
 	private void initializeMenu() {
 		menuBar = new JMenuBar();
-		
 		//Build the first menu.
 		menu = new JMenu("Game");
-
 		menu.setMnemonic(KeyEvent.VK_A);
 		menuBar.add(menu);
 		
 		//a group of JMenuItems
-		JMenuItem loadItem = new JMenuItem("load",KeyEvent.VK_T);
-		menu.add(loadItem);
-		
-		JMenuItem saveItem = new JMenuItem("save");
+		menu.add(loadItem);		
 		menu.add(saveItem);
 		menu.add(setItem);	
 		menu.add(undoItem);
@@ -131,4 +123,13 @@ public class GameGUI extends JFrame{
 	public void addUndoController(ActionListener uc) {
 		this.undoItem.addActionListener(uc);
 	}
+
+	public void addSaveLoadControllers(SaveController savel, LoadController loadl) {
+		this.saveItem.addActionListener(savel);
+		this.loadItem.addActionListener(loadl);
+		
+	}
+
+	
+
 }

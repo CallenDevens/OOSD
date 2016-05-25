@@ -14,12 +14,10 @@ public class Board {
 	private final int num = 3;
 	private Square[][] squares;
 	
-	private static Map<String,Player> players = new HashMap<String, Player>();
-	private static Map<String, ArrayList<Piece>> playerPieces = new HashMap<String, ArrayList<Piece>>();
+	private Map<String,Player> players = new HashMap<String, Player>();
+	public  Map<String, ArrayList<Piece>> playerPieces = new HashMap<String, ArrayList<Piece>>();
 	private ArrayList<Piece> activePlayerPieces = null;
-	
-	private Player activePlayer;
-	
+	private Player activePlayer;	
 	private int turnCount = 0;
 	
 	private GameSetting settings = GameSetting.getInstance();
@@ -162,6 +160,10 @@ public class Board {
 		
 		
 	}
+	
+	public ArrayList<Piece> getPiecesByPlayerID(String id){
+		return this.playerPieces.get(id);
+	}
 
 	public int getBoardHeight() {
 		return this.boardHeight;
@@ -173,5 +175,15 @@ public class Board {
 
 	public void markActivePlayerTurnUndo() {
 		this.undoFlag  = true;
+	}
+
+	public void addPlayerPieces(String playerID, ArrayList<Piece> playerPieces) {
+		this.playerPieces.put(playerID, playerPieces);
+		for(Piece p :playerPieces){
+			int x = p.getPosX();
+			int y = p.getPosY();
+			this.squares[x][y].addPiece(p);
+		}
+		
 	}
 }

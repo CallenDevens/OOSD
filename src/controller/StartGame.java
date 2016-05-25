@@ -19,7 +19,6 @@ public class StartGame {
 		int bHeight = game.getBoardDimensionHeight();
 		view 	= new GameGUI(bWidth, bHeight);
 
-		
 		GameController gController = new GameController();
 		gController.setGameModel(game);
 		gController.setView(view);
@@ -29,9 +28,7 @@ public class StartGame {
 	} //end of StartGame()
 	
 	public StartGame(Game game) {
-		this.game = game;
-		
-		game.initializeGame();
+		this.game = game;		
 		int bWidth = game.getBoardDimensionWidth();
 		int bHeight = game.getBoardDimensionHeight();
 		view 	= new GameGUI(bWidth, bHeight);
@@ -40,9 +37,7 @@ public class StartGame {
 		gController.setGameModel(game);
 		gController.setView(view);
 		view.addWindowListener(gController);		
-	}
-
-	
+	}	
 	
 	public static void main(String [] args){
 		StartGame sg = new StartGame();

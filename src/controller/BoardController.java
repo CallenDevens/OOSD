@@ -75,6 +75,7 @@ public class BoardController implements ComponentListener{
     	
     	this.addMenuPanelListener();
     	this.initializeSquareActionListener();
+//    	System.out.println("component show!");
 	}
 
 	private void addMenuPanelListener() {
@@ -184,14 +185,13 @@ public class BoardController implements ComponentListener{
 	private void initializeSquareActionListener(){
 		int d_height = board.getBoardHeight();
 		int d_width = board.getBoardWidth();
-		
+//		System.out.println("initializeSquareActionListener()");
 		for(int i = 0; i< d_height; i++){
 			for(int j =0; j< d_width; j++){
-				
 				final int x = i;
 				final int y = j;
-				
 				if(board.isPiece(i, j)){
+//					System.out.println("Piece:" + i + ", " +j);
 					PieceController pc = new PieceController(board.getPieceByXandY(x, y));
 					boardView.getSubComponent(x, y).getSubComponent().addMouseListener(pc);
 					
@@ -217,6 +217,7 @@ public class BoardController implements ComponentListener{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+//			System.out.println("invoked!");
 
 			int x = p.getPosX();
 			int y = p.getPosY();

@@ -68,7 +68,6 @@ public class GameSetController implements ActionListener{
 				
 				GameSetting.getInstance().setDimensionHeight(boardHeight);
 				GameSetting.getInstance().setDimensionWidth(boardWidth);
-
 				
 				try {
 					PrintWriter pw =new PrintWriter(new File("setting"));
@@ -78,7 +77,7 @@ public class GameSetController implements ActionListener{
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
-				
+				game.initializeGame();
 				StartGame sg = new StartGame(game);
 			}
 		}

@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import model.command.CommandStack;
 
 public class Game {
-	public static Board board;
+	public Board board;
 	public static ArrayList<Player> players = new ArrayList<Player>();
 	
 	private CommandStack cs = new CommandStack();
 		
 	private PieceClass [] p1Pieces = {PieceClass.MAGE, PieceClass.WARRIOR, PieceClass.HUNTER};
 	private PieceClass [] p2Pieces = {PieceClass.ROGUE, PieceClass.PALADIN, PieceClass.PRISST};
+	
+	Player p1;
+	Player p2;
 		
 	public Game(){
 		//initializeGame();
+
 	}
 	
 	public Player getActivePlayer(){
@@ -21,17 +25,17 @@ public class Game {
 	}
 	
 	public void initializeGame(){
-		
+		initializeBoard();
+		board.setPieceforPlayer(p1,p1Pieces,0);
+		board.setPieceforPlayer(p2,p2Pieces,board.getBoardWidth()-1);		
+	}
+	
+	public void initializeBoard(){
 		board = new Board();
-		Player p1 = new Player("p1");
-		Player p2 = new Player("p2");
-		
+		p1 = new Player("p1");
+		p2 = new Player("p2");
 		players.add(p1);
 		players.add(p2);
-		
-		board.setPieceforPlayer(p1,p1Pieces,0);
-		board.setPieceforPlayer(p2,p2Pieces,board.getBoardWidth()-1);
-		
 	}
 
 	public int getBoardDimensionWidth(){

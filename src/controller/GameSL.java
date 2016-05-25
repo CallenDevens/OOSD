@@ -1,4 +1,4 @@
-package model;
+package controller;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -21,59 +21,67 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import model.Board;
+import model.Game;
+import model.Piece;
+import model.PieceClass;
+import model.SquareComponentFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameSL {
 	/***save game to XML file*/
-    private Document document;
-    private Game game;
-	
-	public void init() {
+    private static Document document;
+    
+	public static void init() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            this.document = builder.newDocument();
+            document = builder.newDocument();
         } 
         catch (ParserConfigurationException e) {
             System.out.println(e.getMessage());
         }
     }
 
-
 	/**
 	 * Game Save and Load board method
 	 * **/
 	/**save board pieces into XML file**/
-	public void saveBoard(String fileName){
-		Element root = this.document.createElement("board");   //XML root name
-        this.document.appendChild(root);
+	public static void saveBoard(Game g,String fileName){
+		init();
+		Board board  = g.getBoard();
+		Element root = document.createElement("board");   //XML root name
+        document.appendChild(root);
         /**Get current pieces for player 1 and player 2**/
-        ArrayList<Piece> p1 = playerPieces.get("p1");
-        ArrayList<Piece> p2 = playerPieces.get("p2");
+        
+        ArrayList<Piece> p1 = board.getPiecesByPlayerID("p1");
+        ArrayList<Piece> p2 = board.getPiecesByPlayerID("p2");
 		  /**Loop through all pieces of player 1 and append their attribute into XML file**/
           for(int i=0; i<p1.size();i++)
 		     {
-					Element pieces = this.document.createElement("pieces"); 
+					Element pieces = document.createElement("pieces"); 
 					
-			        Element player = this.document.createElement("player"); 			        
-			        player.appendChild(this.document.createTextNode("p1")); 
+			        Element player = document.createElement("player"); 			        
+			        player.appendChild(document.createTextNode("p1")); 
 			        pieces.appendChild(player); 
 					 
-			        Element name = this.document.createElement("name"); 
-			        name.appendChild(this.document.createTextNode(p1.get(i).getPieceClassString())); 
+			        Element name = document.createElement("name"); 
+			        name.appendChild(document.createTextNode(p1.get(i).getPieceClassString())); 
 			        pieces.appendChild(name); 
 			        
-			        Element posX = this.document.createElement("posX"); 
-			        posX.appendChild(this.document.createTextNode(String.valueOf(p1.get(i).getPosX()))); 
+			        Element posX = document.createElement("posX"); 
+			        posX.appendChild(document.createTextNode(String.valueOf(p1.get(i).getPosX()))); 
 			        pieces.appendChild(posX);
 			        
-			        Element posY = this.document.createElement("posY"); 
-			        posY.appendChild(this.document.createTextNode(String.valueOf(p1.get(i).getPosY()))); 
+			        Element posY = document.createElement("posY"); 
+			        posY.appendChild(document.createTextNode(String.valueOf(p1.get(i).getPosY()))); 
 			        pieces.appendChild(posY);
 			        
-			        Element hp = this.document.createElement("hp"); 
-			        hp.appendChild(this.document.createTextNode(p1.get(i).getHealthPoint())); 
+			        Element hp = document.createElement("hp"); 
+			        hp.appendChild(document.createTextNode(p1.get(i).getHealthyPoint()+"")); 
 			        pieces.appendChild(hp);
 			        
 			        root.appendChild(pieces);		
@@ -81,26 +89,26 @@ public class GameSL {
           /**Loop through all pieces of player 2 and append their attribute into XML file**/
 		   for(int i=0; i<p2.size();i++)
 		     {
-					Element pieces = this.document.createElement("pieces"); 
+					Element pieces = document.createElement("pieces"); 
 					
-			        Element player = this.document.createElement("player"); 			        
-			        player.appendChild(this.document.createTextNode("p2")); 
+			        Element player =document.createElement("player"); 			        
+			        player.appendChild(document.createTextNode("p2")); 
 			        pieces.appendChild(player); 
 					 
-			        Element name = this.document.createElement("name"); 
-			        name.appendChild(this.document.createTextNode(p2.get(i).getPieceClassString())); 
+			        Element name = document.createElement("name"); 
+			        name.appendChild(document.createTextNode(p2.get(i).getPieceClassString())); 
 			        pieces.appendChild(name); 
 			        
-			        Element posX = this.document.createElement("posX"); 
-			        posX.appendChild(this.document.createTextNode(String.valueOf(p2.get(i).getPosX()))); 
+			        Element posX = document.createElement("posX"); 
+			        posX.appendChild(document.createTextNode(String.valueOf(p2.get(i).getPosX()))); 
 			        pieces.appendChild(posX);
 			        
-			        Element posY = this.document.createElement("posY"); 
-			        posY.appendChild(this.document.createTextNode(String.valueOf(p2.get(i).getPosY()))); 
+			        Element posY = document.createElement("posY"); 
+			        posY.appendChild(document.createTextNode(String.valueOf(p2.get(i).getPosY()))); 
 			        pieces.appendChild(posY);
 			        
-			        Element hp = this.document.createElement("hp"); 
-			        hp.appendChild(this.document.createTextNode(p2.get(i).getHealthPoint())); 
+			        Element hp = document.createElement("hp"); 
+			        hp.appendChild(document.createTextNode(p2.get(i).getHealthyPoint()+"")); 
 			        pieces.appendChild(hp);
 			        
 			        root.appendChild(pieces);		
@@ -133,7 +141,9 @@ public class GameSL {
     }
 	
 	/**Load Game from XML file**/
-	public void loadBoard(String fileName) {
+	public static void loadBoard(Game g,String fileName) {
+		g.initializeBoard();
+		Board board = g.getBoard();
 		/***Read XML file**/
 		try {   
 			   File file = new File(fileName);   
@@ -151,9 +161,12 @@ public class GameSL {
 				   int x=Integer.parseInt(doc.getElementsByTagName("posX").item(i).getFirstChild().getNodeValue());
 				   int y=Integer.parseInt(doc.getElementsByTagName("posY").item(i).getFirstChild().getNodeValue());
 				   int hp = Integer.parseInt(doc.getElementsByTagName("hp").item(i).getFirstChild().getNodeValue());
-			if(doc.getElementsByTagName("name").item(i).getFirstChild().getNodeValue().equals("MAGE"))	   
-				 {pc = PieceClass.MAGE;}
-			else if(doc.getElementsByTagName("name").item(i).getFirstChild().getNodeValue().equals("HUNTER"))
+			
+				   if(doc.getElementsByTagName("name").item(i).getFirstChild().getNodeValue().equals("MAGE"))	   
+				   {
+					   pc = PieceClass.MAGE;
+				   }
+				   else if(doc.getElementsByTagName("name").item(i).getFirstChild().getNodeValue().equals("HUNTER"))
 				 {pc = PieceClass.HUNTER;} 
 			else if(doc.getElementsByTagName("name").item(i).getFirstChild().getNodeValue().equals("PALADIN"))
 				 {pc = PieceClass.PALADIN;}
@@ -164,23 +177,23 @@ public class GameSL {
 			else if(doc.getElementsByTagName("name").item(i).getFirstChild().getNodeValue().equals("WARRIOR"))
 				 {pc = PieceClass.WARRIOR;}		 	  
 				   Piece p = (Piece) SquareComponentFactory.createPiece(pc,x,y);  
-				   p.setHp(hp);
+				   p.setHP(hp);
 				   /***Put these pieces into Player 1 sets or Player 2 sets***/
 				    if(doc.getElementsByTagName("player").item(i).getFirstChild().getNodeValue().equals("p1"))
 				    {p1Pieces.add(p);}
 				    else
 				    {p2Pieces.add(p);}
 			     }//end of for loop
-			   playerPieces.put("p1",p1Pieces);
-			   playerPieces.put("p2",p2Pieces);	
-			   System.out.println("Loaded");
+			   board.playerPieces.clear();
 			   
+			   board.addPlayerPieces("p1", p1Pieces);
+			   board.addPlayerPieces("p2", p2Pieces);
+
 			   //load completed with playerPiece output
 			  } 
 		catch (Exception e) {   
 			   e.printStackTrace();   
 			  }   
-		 System.out.println("Game Loaded");
 		 
 	}
 

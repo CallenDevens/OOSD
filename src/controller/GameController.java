@@ -33,7 +33,7 @@ public class GameController implements WindowListener{
 		int boardWidth = game.getBoardDimensionWidth();	
 		
 		this.gameGUI.addBoardPanel(boardHight, boardWidth);
-		this.gameGUI.setSize(squareSize*boardWidth+300, squareSize* boardHight+200);  
+//		this.gameGUI.setSize(squareSize*boardWidth, squareSize* boardHight);  
 		this.gameGUI.revalidate();
 		this.gameGUI.repaint();	
 		this.game.startOneTurn();
@@ -46,6 +46,8 @@ public class GameController implements WindowListener{
 		this.gameGUI.addMenuSettingItemController(new MenuSettingListener());
 		UndoController uc = new UndoController(game);
 		this.gameGUI.addUndoController(uc);
+		
+		this.gameGUI.addSaveLoadControllers(new SaveController(game), new LoadController(gameGUI));
 	}
 
 	private class MenuSettingListener implements ActionListener{
