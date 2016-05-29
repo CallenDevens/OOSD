@@ -11,10 +11,15 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.JLayeredPane;
 
+/** BoardFramePanel contains (from lower to higher)
+ * backGround layer
+ * board layer
+ * menu(player menu) layer 
+ * piece info layer */
 public class BoardFramePanel extends JLayeredPane{
+	
 	private final static Integer BOARD_LAYER_NUM = 100;
 	private final static Integer MODEL_LAYER_NUM = 150;
-
 	private final static Integer MENU_LAYER_NUM = 200;
 	private final static Integer PIECE_INFO_NUM = 300;
 	
@@ -24,7 +29,7 @@ public class BoardFramePanel extends JLayeredPane{
 	private SquareComponentInfoPanel pieceInfoView;
 	
 	public BoardFramePanel(int bHeight, int bWidth){
-		
+		/* place components */
 		this.boardView = new BoardPanel(bHeight, bWidth);
 		this.setLayout(new LayeredPaneLayout(this));
 		this.setVisible(true);
@@ -44,22 +49,22 @@ public class BoardFramePanel extends JLayeredPane{
 		stateMenuView = new StateSelectionPanel();
 		this.add(stateMenuView, MODEL_LAYER_NUM);
 	}
+	
 	public BoardPanel getBoardView(){
 		return this.boardView;
 	}
+	
 	public SquareComponentInfoPanel getPieceInfoPanel(){
 		return this.pieceInfoView;
 	}
 	
-	public void setPieceInfoPanelContent(String job, String atk, String hp, String range, String des){
-		
+	public void setPieceInfoPanelContent(String job, String atk, String hp, String range, String des){	
 		pieceInfoView.setJobLabel(job);
 		pieceInfoView.setImageIcon(job+".png");
 		pieceInfoView.setAttackPointLabel(atk);
 		pieceInfoView.setHealthPointLabel(hp);
 		pieceInfoView.setMoveRangeLabel(range);
 		pieceInfoView.setDescriptionLabel(des);
-		
 	}
 	
 	public void addPieceMoveButtonListener(ActionListener l){
@@ -69,7 +74,6 @@ public class BoardFramePanel extends JLayeredPane{
 		this.pieceMenuView.addAttackButtonListener(l);		
 	}
 
-	
 	public void moveAndShowPieceMenu(int poxX, int posY){
 		this.pieceMenuView.moveAndShowUp(poxX, posY);
 		this.revalidate();
@@ -104,8 +108,6 @@ public class BoardFramePanel extends JLayeredPane{
 		return pieceMenuView.isVisible();
 	}
 	
-	
-	
 	public class LayeredPaneLayout implements LayoutManager {
 
 	    private final Container target;
@@ -122,9 +124,7 @@ public class BoardFramePanel extends JLayeredPane{
 	    @Override
 	    public void layoutContainer(final Container container) {
 	            for (final Component component : container.getComponents()) {
-//	            	System.out.println(component.getWidth());
 	            	Point p = component.getLocation();
-//	            	System.out.println(p.x+", " +p.y);
 	                    component.setBounds(new Rectangle(p.x, p.y, component.getWidth(), component.getHeight()));
 	            }
 	    }

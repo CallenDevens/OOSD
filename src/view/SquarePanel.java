@@ -17,11 +17,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class SquarePanel extends BasicPanel{	
-//    private JButton pieceButton;
+import model.observer.Observer;
+/** Observer for Board Panel
+ * update when getting notification */
+public class SquarePanel extends BasicPanel implements Observer{	
 	
+	/* component to hold piece or other component */
 	private SquareComponentPanel scp;
-	
     private int posX;
     private int posY;
     
@@ -31,11 +33,7 @@ public class SquarePanel extends BasicPanel{
     public SquarePanel() {
     	this.setSize(60, 60);
     	this.setMinimumSize(new Dimension(60, 60));
-    	this.setPreferredSize(getSize());
-    	
- //   	pieceButton = null;
- //   	this.state = EMPTY_SQUARE;
-    	
+    	this.setPreferredSize(getSize());    	
     	this.setState(PanelState.SQUARE_EMPTY);
     	this.setOpaque(false);
     	this.setBackground(Color.YELLOW);
@@ -46,7 +44,6 @@ public class SquarePanel extends BasicPanel{
 	public BasicPanel getSubComponent(){
     	return this.scp;
 	}
-
     
     public BasicPanel getSquareComponentView(){
     	return this.scp;
@@ -63,14 +60,11 @@ public class SquarePanel extends BasicPanel{
 		this.setState(PanelState.PIECE_NON_CHOSEN);
 		this.repaint();
 	}
-
 	
 	public void setPiece(String pClass) {
 		this.scp = new SquareComponentPanel(pClass);		
 		this.setState(PanelState.PIECE_NON_CHOSEN);
-		
 		this.addComponent(scp);
-		
 		this.revalidate();
 		this.repaint();
 	}
@@ -153,5 +147,20 @@ public class SquarePanel extends BasicPanel{
 	@Override
 	public void moveAndShowUp(int posX, int posY) {
 		
+	}
+
+	@Override
+	public void update() {
+		this.setTransparent(0);
+		this.setBackground(Color.YELLOW);
+		
+		if(this.containsPiece()||(this.getState() == PanelState.SQUARE_ATTACKABLE && this.scp!=null)){
+			this.setState(PanelState.PIECE_NON_CHOSEN);
+		}
+		else{
+			this.setState(PanelState.SQUARE_EMPTY);;
+		}
+		this.revalidate();
+		this.repaint();		
 	} 
 }

@@ -12,6 +12,7 @@ public class GameSetting {
 	
 	private int board_height = 11;
 	private int board_width = 11;
+	private int piecenum = 9;
 
 	private GameSetting(){
 		readBoardSetting();
@@ -19,7 +20,8 @@ public class GameSetting {
 	
 	public static GameSetting getInstance(){
 		if(setting == null){
-			return new GameSetting();
+			setting = new GameSetting();
+			return setting;
 		}
 		else{
 			return setting;
@@ -52,17 +54,23 @@ public class GameSetting {
 			
 			this.board_height = Integer.parseInt(br.readLine());
 			this.board_width = Integer.parseInt(br.readLine());
-			
+			this.piecenum = Integer.parseInt(br.readLine());
 			br.close();
 			
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void setPieceNumber(int pieceNum) {
+		this.piecenum = pieceNum;
+	}
+
+	public int getPieceNumber() {
+		return this.piecenum;
 	}
 
 }

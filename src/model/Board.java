@@ -30,19 +30,15 @@ public class Board {
 		return this.activePlayer;
 	}
 
-	/*
-	private int boardHeight = settings.getDimensionHeight();
-	private int boardWidth = settings.getDimensionWidth();
-	*/
-
+	int pieceNum;
 	//use singleton pattern to initialize board instance
 	//for there is only one board in a game
 	
 	public Board(){
-		
 		boardHeight = settings.getDimensionHeight();
 		boardWidth = settings.getDimensionWidth();
-
+		pieceNum = settings.getPieceNumber();
+		
 		squares = new Square[boardHeight][boardWidth];	
 		initSquares();
 	}
@@ -84,13 +80,27 @@ public class Board {
 	public void setPieceforPlayer(Player p1, PieceClass[] p1Pieces, int posY) {
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		playerPieces.put(p1.getPlayerName(), pieces);
-		players.put(p1.getPlayerName(), p1);
-
-		int j = 0;
+		int j =0;
+		
 		for(int i = 0; i < p1Pieces.length; i++){
-			for(; j < num*(i+1); j++){
-				Piece p = (Piece) SquareComponentFactory.createPiece(p1Pieces[i],j+1, posY);
-				this.setPiece(j+1, posY , p);
+			
+			for(; j < this.pieceNum/p1Pieces.length * (i+1); j++){
+				
+				int posX = j;				
+				if(j == this.boardHeight){
+					if(posY < this.boardWidth/2){
+						posY++;
+					}else{
+						posY--;
+					}
+				}
+				
+				if(j >= this.boardHeight){
+					posX = j - this.boardHeight;
+				}
+				
+				Piece p = (Piece) SquareComponentFactory.createPiece(p1Pieces[i],posX, posY);
+				this.setPiece(posX, posY , p);
 			    pieces.add(p);
 			}
 		}
@@ -114,7 +124,11 @@ public class Board {
 
 		int playerID = (turnCount++)%2 +1;
 		String playerName = "p"+ playerID;
+//		System.out.println(playerName);
 		activePlayer = players.get(playerName);
+		if(activePlayer == null){
+			System.out.println("player error!");
+		}
 		
 		for(Map.Entry<String, ArrayList<Piece>> entry : playerPieces.entrySet()){
 			if(entry.getKey().equals(playerName)){
@@ -185,5 +199,9 @@ public class Board {
 			this.squares[x][y].addPiece(p);
 		}
 		
+	}
+
+	public void addPlayer(Player player) {
+		players.put(player.getPlayerName(), player);
 	}
 }

@@ -21,14 +21,7 @@ public class SettingMenuWindow extends JFrame {
 		
 	private JSpinner widthSpinner = new JSpinner(new SpinnerNumberModel(11, 9, 20, 1));
 	private JSpinner heightSpinner = new JSpinner(new SpinnerNumberModel(11, 9, 20, 1));
-	
-	private JSpinner mageNumSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
-	private JSpinner rougeNumSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
-	private JSpinner warriorNumSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
-	
-	private JSpinner paladinNumSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
-	private JSpinner prisstNumSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
-	private JSpinner hunterNumSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+	private JSpinner pieceNumSpinner = new JSpinner(new SpinnerNumberModel(9, 9, 27, 9));
 	
 	private JButton okButton = new JButton("OK");
 	private JButton cancelButton = new JButton("Cancel");
@@ -58,23 +51,9 @@ public class SettingMenuWindow extends JFrame {
 		c.gridx = 1;
 		c.gridy++;
 		
-		this.addInputGroup(new JLabel("Mage    : "),mageNumSpinner,c);
-		this.addInputGroup(new JLabel("Paladin : "), paladinNumSpinner,c);
+		this.addInputGroup(new JLabel("Piece number: "),pieceNumSpinner,c);
 		con.add(Box.createRigidArea(new Dimension(15,20)),c);
 
-		c.gridx = 1;
-		c.gridy++;
-		this.addInputGroup(new JLabel("Rouge   : "),rougeNumSpinner,c);
-		this.addInputGroup(new JLabel("Prisst  : "), prisstNumSpinner,c);
-		con.add(Box.createRigidArea(new Dimension(15,20)),c);
-
-		
-		c.gridx = 1;
-		c.gridy++;
-		this.addInputGroup(new JLabel("Warrior : "),warriorNumSpinner,c);
-		this.addInputGroup(new JLabel("Hunter  : "), hunterNumSpinner,c);
-		con.add(Box.createRigidArea(new Dimension(15,20)),c);
-		
 		c.gridx = 2;
 		c.gridy++;
 		
@@ -110,28 +89,8 @@ public class SettingMenuWindow extends JFrame {
 		return (int) this.heightSpinner.getValue();
 	}
 	
-	public int getSettingMageNum(){
-		return (int) this.mageNumSpinner.getValue();
-	}
-	
-	public int getSettingRougeNum(){
-		return (int) this.rougeNumSpinner.getValue();
-	}
-
-	public int getSettingWarriorNum(){
-		return (int) this.warriorNumSpinner.getValue();
-	}
-	
-	public int getSettingPaladinNum(){
-		return (int) this.paladinNumSpinner.getValue();
-	}
-	
-	public int getSettingPrisstNum(){
-		return (int) this.prisstNumSpinner.getValue();
-	}
-	
-	public int getSettingHunterNum(){
-		return (int) this.hunterNumSpinner.getValue();
+	public int getSettingPieceNum(){
+		return (int) this.pieceNumSpinner.getValue();
 	}
 
 	public void addSettingOKButtonListener(ActionListener l) {

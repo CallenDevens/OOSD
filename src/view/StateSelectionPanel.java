@@ -10,17 +10,19 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-
+/** Composite of composition design pattern 
+ * player State Selection Menu
+ * show up for player to choose state of selected piece
+ * optional states: ATTACK DEFENSIVE NORMAL */
 public class StateSelectionPanel extends BasicPanel{
 	private Map<String, JButton> menuitems = new LinkedHashMap<String,JButton>();
 
-	private JButton attackButton = new JButton("ATTACK MODEL");
-	private JButton defenceButton = new JButton("DEFENSIVE MODEL");
-	private JButton normalButton = new JButton("NORMAL MODEL");
+	private JButton attackButton = new JButton("ATTACK MODE");
+	private JButton defenceButton = new JButton("DEFENSIVE MODE");
+	private JButton normalButton = new JButton("NORMAL MODE");
 	private JButton cancelButton = new JButton("CANCEL");
 
 	public StateSelectionPanel(){
-		
 		this.setBackground(Color.BLACK);
 		this.setOpaque(false);
 		this.setTransparent((float) 0.7);
@@ -39,12 +41,10 @@ public class StateSelectionPanel extends BasicPanel{
 		this.setSize(150,150);
 		
 		this.cancelButton.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StateSelectionPanel.this.setVisible(false);
 			}
-			
 		});
 	}
 	
@@ -70,13 +70,11 @@ public class StateSelectionPanel extends BasicPanel{
 		});
 	}
 
-
 	private void customizeMenuItems() {
 		for(JButton button:menuitems.values()){
 			this.menuItemStyleSetter(button);
 			this.add(button);
 		}
-		
 	}
 
 	@Override
@@ -89,5 +87,4 @@ public class StateSelectionPanel extends BasicPanel{
 	public Map<String, JButton> getButtons() {
 		return this.menuitems;
 	}
-
 }

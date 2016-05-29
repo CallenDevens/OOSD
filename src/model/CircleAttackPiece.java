@@ -3,8 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.GameSetting;
-
+/** Decorator to offer different attackable area to pieces of various classes*/
 public class CircleAttackPiece extends AbstractAttackPieceDecorator{
 
 	protected CircleAttackPiece(Piece p) {

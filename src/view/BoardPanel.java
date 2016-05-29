@@ -11,7 +11,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
-public class BoardPanel extends BasicPanel{
+import model.observer.Observer;
+import model.observer.Subject;
+
+public class BoardPanel extends BasicPanel implements Subject{
 	
 	private SquarePanel[][] grids ;  
 	private int dimension_width = -1;
@@ -83,12 +86,13 @@ public class BoardPanel extends BasicPanel{
 		      for(int j = 0; j < this.dimension_width; j++) {  
 		    	  grids[i][j] = new SquarePanel();
 		          this.addComponent(grids[i][j], i,j);
+		          this.observers.add(grids[i][j]);
 		     }
 		 }
 	}
 	
 	@Override
-	protected void addComponent(BasicPanel panel, int posX, int posY){
+	public void addComponent(BasicPanel panel, int posX, int posY){
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = posY;
 		c.gridy = posX;
@@ -163,11 +167,14 @@ public class BoardPanel extends BasicPanel{
 	}
 
 	public void cleanAllSquares() {
+		/*
     	for(int i =0 ;i < this.dimension_height; i++){
     		for(int j = 0; j < this.dimension_width; j++){
     			grids[i][j].clean(); 
     		}
-    	}
+    	}*/
+		
+		this.notifyObservers();
     	this.repaint();
 	}
 
@@ -177,8 +184,24 @@ public class BoardPanel extends BasicPanel{
 	}
 
 	@Override
-	public void moveAndShowUp(int posX, int posY) {
-		// TODO Auto-generated method stub
+	public void moveAndShowUp(int posX, int posY) {		
+	}
+
+	@Override
+	public void attach(Observer observer) {
+		this.observers.add(observer);
 		
+	}
+
+	@Override
+	public void detach(Observer observer) {
+		this.observers.remove(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+		for(Observer obs: this.observers){
+			obs.update();
+		}
 	}
 }

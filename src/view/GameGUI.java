@@ -58,25 +58,20 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void addBoardPanel(int bHeight, int bWidth){
-		
-		BoardPanel bPanel= new BoardPanel(bHeight, bWidth);
-
 		FlowLayout fl = new FlowLayout();
 		fl.setAlignment(FlowLayout.LEFT);
 		
 		mainPanel.setLayout(fl);
 		mainPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-		
 		mainPanel.setSize(bWidth*60, bHeight*60);
-		
 		mainPanel.setMinimumSize(mainPanel.getSize());
 		mainPanel.setPreferredSize(mainPanel.getSize());
-				
+		
 		backPanel = new BoardFramePanel(bHeight,bWidth);
 		backPanel.setVisible(true);
 		
+		/* place backPanel on mainPanel */
 		mainPanel.add(backPanel);		
-		
 		this.getContentPane().add(mainPanel);
 		
 	}
@@ -100,6 +95,7 @@ public class GameGUI extends JFrame{
 	
 	private void initializeMenu() {
 		menuBar = new JMenuBar();
+		
 		//Build the first menu.
 		menu = new JMenu("Game");
 		menu.setMnemonic(KeyEvent.VK_A);
@@ -127,7 +123,6 @@ public class GameGUI extends JFrame{
 	public void addSaveLoadControllers(SaveController savel, LoadController loadl) {
 		this.saveItem.addActionListener(savel);
 		this.loadItem.addActionListener(loadl);
-		
 	}
 
 	

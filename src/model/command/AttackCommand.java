@@ -3,14 +3,13 @@ package model.command;
 import model.Board;
 import model.Piece;
 import model.PieceClass;
-import model.SquareComponentFactory;
 import view.BasicPanel;
 import view.BoardFramePanel;
 import view.BoardPanel;
 import view.PanelState;
-import view.SquareComponentPanel;
 
 public class AttackCommand implements Command{
+
 	//receivers
 	private Board board;
 	private BoardFramePanel backPanel;
@@ -51,12 +50,11 @@ public class AttackCommand implements Command{
 		board.switchActivePieces();
 		
 		if(!board.isPiece(targetX, targetY)){
-			System.out.println("remove!");
 			pPanel = boardView.removePieceOn(targetX, targetY);
 			boardView.repaint();
 		}						
 		boardView.resetPieceMoveState();						
-		boardView.cleanAllSquares();
+		boardView.notifyObservers();
     	backPanel.enableMenuMove();
     	boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
 	}
@@ -75,7 +73,7 @@ public class AttackCommand implements Command{
 			
 		}
 		boardView.resetPieceMoveState();						
-		boardView.cleanAllSquares();		
+		boardView.notifyObservers();
     	boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
 	}
 }

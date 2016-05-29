@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,11 +25,14 @@ import model.Board;
 import model.Game;
 import model.Piece;
 import model.PieceClass;
+import model.Player;
 import model.SquareComponentFactory;
+import utils.GameSetting;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/** a utility used to save and load game model,
+ *  game model would be saved as a xml file*/
 public class GameSL {
 	/***save game to XML file*/
     private static Document document;
@@ -54,6 +56,38 @@ public class GameSL {
 		init();
 		Board board  = g.getBoard();
 		Element root = document.createElement("board");   //XML root name
+		
+		Element width = document.createElement("width");
+		width.appendChild(document.createTextNode(GameSetting.getInstance().getDimensionWidth()+""));
+		
+		Element height = document.createElement("height");
+		height.appendChild(document.createTextNode(GameSetting.getInstance().getDimensionHeight()+""));
+		
+		root.appendChild(width);
+		root.appendChild(height);
+		
+		Element active_player = document.createElement("activeplayer");
+		active_player.appendChild(document.createTextNode(g.getActivePlayer().getPlayerName()));
+		root.appendChild(active_player);
+
+		for(Player p:g.getPlayers()){
+			Element player = document.createElement("PLAYER");
+			Element playerid = document.createElement("id");
+			playerid.appendChild(document.createTextNode(p.getPlayerName()));
+			
+			Element undoCount = document.createElement("undocount");
+			undoCount.appendChild(document.createTextNode(p.getUndoCount()+""));
+			
+			Element undoavaible = document.createElement("undoavailable");
+			undoavaible.appendChild(document.createTextNode(p.isUndoAvailable()+""));
+			
+			player.appendChild(playerid);
+			player.appendChild(undoCount);
+			player.appendChild(undoavaible);
+			
+			root.appendChild(player);
+		}
+		
         document.appendChild(root);
         /**Get current pieces for player 1 and player 2**/
         
@@ -142,8 +176,6 @@ public class GameSL {
 	
 	/**Load Game from XML file**/
 	public static void loadBoard(Game g,String fileName) {
-		g.initializeBoard();
-		Board board = g.getBoard();
 		/***Read XML file**/
 		try {   
 			   File file = new File(fileName);   
@@ -153,7 +185,32 @@ public class GameSL {
 			   
 			   ArrayList<Piece> p1Pieces = new ArrayList<Piece>();
 			   ArrayList<Piece> p2Pieces = new ArrayList<Piece>();
-			   /**Get pieces paremeters from XML file**/
+			   /**Get pieces paremeters from XML file**/			   
+			   int width = Integer.parseInt(doc.getElementsByTagName("width").item(0).getFirstChild().getNodeValue());
+			   int height = Integer.parseInt(doc.getElementsByTagName("height").item(0).getFirstChild().getNodeValue());
+			   
+			   GameSetting.getInstance().setDimensionHeight(height);
+			   GameSetting.getInstance().setDimensionWidth(width);
+			   
+			   g.initializeBoard();
+			   Board board = g.getBoard();
+			   
+			   NodeList playerLst = doc.getElementsByTagName("PLAYER");
+			   for(int i = 0; i< playerLst.getLength();i++){
+				   NodeList idLst =doc.getElementsByTagName("id");
+				   NodeList countLst = doc.getElementsByTagName("undocount");
+				   NodeList avaLst = doc.getElementsByTagName("undoavailable");
+				   
+				   String playerid = idLst.item(i).getFirstChild().getNodeValue();
+				   int undoCount = Integer.parseInt(countLst.item(i).getFirstChild().getNodeValue());
+				   boolean undoAvail = Boolean.parseBoolean(avaLst.item(i).getFirstChild().getNodeValue());
+				   
+				   Player  p = new Player(playerid);
+				   p.setUndoCount(undoCount);
+				   p.setUndoAvailable(undoAvail);
+				   
+				   g.addPlayer(p);
+			   }
 			   NodeList nl = doc.getElementsByTagName("pieces");  
 			   /***Loop all pieces and re-build their status, position, HP, etc.**/
 			   for (int i = 0; i < nl.getLength(); i++) {   
@@ -188,6 +245,11 @@ public class GameSL {
 			   
 			   board.addPlayerPieces("p1", p1Pieces);
 			   board.addPlayerPieces("p2", p2Pieces);
+			   
+			   String activeplayerName = doc.getElementsByTagName("activeplayer").item(0).getFirstChild().getNodeValue();
+			   if(!activeplayerName.equals("p1")){
+				   board.switchActivePieces();
+			   }
 
 			   //load completed with playerPiece output
 			  } 

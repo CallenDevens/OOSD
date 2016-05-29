@@ -10,6 +10,7 @@ public class Piece extends SquareComponent{
 	private boolean movable = false;
 	private PieceClass pclass;
 	
+	/* piece state, piece performs different actions in accordance with it*/
 	private PieceState state;
 
 	public Piece(PieceClass pclass, int atk,int health, int agility, int atkrange,int posX, int posY){
@@ -93,18 +94,6 @@ public class Piece extends SquareComponent{
 		return this.atkrange;
 	}
 
-	public void changeHP(int amount) {
-		this.healthPoint = this.healthPoint + amount;
-	}
-
-	public void changeATK(int amount) {
-		this.attack = this.attack + amount;
-		
-	}
-
-	public void setAtk(int hp) {
-		this.attack = hp;
-	}
 	
 	public class AttackState implements PieceState{
 
@@ -125,16 +114,18 @@ public class Piece extends SquareComponent{
 		}
 
 	}
-	
+	/* inner class implements PieceState */
 	public class DefensiveState implements PieceState{
 
 		@Override
 		public int getPower() {
+			/* a piece gives 80% of original damage */
 			return (int) (attack*0.8);
 		}
 
 		@Override
 		public void getHurt(int damage) {
+			/* a piece receives 80% of original damage */
 		     healthPoint -= damage*0.8;
 		}
 

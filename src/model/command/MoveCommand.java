@@ -38,7 +38,7 @@ public class MoveCommand implements Command{
 			BasicPanel piece = boardView.removePieceOn(originX,originY);
 
 			boardView.addPieceOn(piece, targetX, targetY);
-			boardView.cleanAllSquares();
+			boardView.notifyObservers();
 			boardView.setState(PanelState.BOARD_MENU_SHOWN);
 			backPanel.moveAndShowPieceMenu(targetX, targetY);
 		    backPanel.disableMenuMove();

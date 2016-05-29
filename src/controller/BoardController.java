@@ -22,7 +22,7 @@ import view.BasicPanel;
 import view.BoardFramePanel;
 import view.BoardPanel;
 import view.PanelState;
-/* a class implements ComponentListener, 
+/** a class implements ComponentListener, 
  * providing actions to be taken when board view is being loaded.
  * 
  * Warning:
@@ -32,9 +32,7 @@ import view.PanelState;
  * 
  * Example for invoking the method: component.setVisible(false);component.setVisible(true);
  * */
-
 public class BoardController implements ComponentListener{
-	
     //this controller works as an link between board and visual board
 	private Board board = null;
 	private BoardPanel boardView = null;
@@ -58,13 +56,10 @@ public class BoardController implements ComponentListener{
 	@Override
 	public void componentResized(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void componentMoved(ComponentEvent e) {		
 	}
 
 	@Override
@@ -73,20 +68,27 @@ public class BoardController implements ComponentListener{
     	this.boardView.revalidate();
     	this.boardView.repaint();
     	
+    	//bind action listeners to Player Menu
     	this.addMenuPanelListener();
+    	
+    	//bind action listeners to square and piece
     	this.initializeSquareActionListener();
-//    	System.out.println("component show!");
 	}
 
+	/**
+	 * bind action listeners to Player Menu, 
+	 * which shows up on the board when player click a piece
+	 */
 	private void addMenuPanelListener() {
 		this.backPanel.addPieceMoveButtonListener(new PieceMoveButtonController());
 		this.backPanel.addPieceAttackButtonListener(new PieceAttackButtonController());
 		this.backPanel.addMenuResignActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int x = boardView.getActivePiecePosX();
-				int y = boardView.getActivePiecePosY();		
+				/* after Resign button is clicked, 
+				 * switch active player
+				 * enable move button(for active player)
+				 * reset board state to BOARD_STATE_UNCERTAIN which represents start of a new turn. */
 				board.switchActivePieces();
 				backPanel.enableMenuMove();
 				backPanel.setMenuVisisble(false);
@@ -96,47 +98,61 @@ public class BoardController implements ComponentListener{
 		});
 		
 		this.backPanel.addMenuCancelActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				/* as menu has been cancelled, switch state*/
 				boardView.setState(PanelState.BOARD_NO_MENU_SHOWN);
-
 			}
 		});
 		
-		this.backPanel.addModelListener("ATTACK MODEL", new ActionListener(){
-
+		this.backPanel.addModelListener("ATTACK MODE", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					backPanel.setStateMenuInvisible();
-					int x = boardView.getActivePiecePosX();
-					int y = boardView.getActivePiecePosY();
+			    /* after button clicked, set state selection menu invisible*/
+				backPanel.setStateMenuInvisible();
+				
+				/* get selected piece*/
+				int x = boardView.getActivePiecePosX();
+				int y = boardView.getActivePiecePosY();
+				Piece p = board.getPieceByXandY(x, y);
 					
-					Piece p = board.getPieceByXandY(x, y);
-					p.SetState(p.new AttackState());
-					backPanel.moveAndShowPieceMenu(x, y);
-					boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
+				/* set the state of selected piece as attack */
+				p.SetState(p.new AttackState());
+					
+				/* show action menu*/
+				backPanel.moveAndShowPieceMenu(x, y);
+					
+				/* update board state*/
+				boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
 
-				}	
+			}	
 		});
 		
 		
-		this.backPanel.addModelListener("DEFENSIVE MODEL", new ActionListener(){
+		this.backPanel.addModelListener("DEFENSIVE MODE", new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
-					backPanel.setStateMenuInvisible();
-					int x = boardView.getActivePiecePosX();
-					int y = boardView.getActivePiecePosY();
-					
-					Piece p = board.getPieceByXandY(x, y);
-					p.SetState(p.new DefensiveState());
-					backPanel.moveAndShowPieceMenu(x, y);
-					boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
-				}	
+			public void actionPerformed(ActionEvent e){
+			    /* after button clicked, set state selection menu invisible*/
+				backPanel.setStateMenuInvisible();
+				
+				/* get selected piece*/
+				int x = boardView.getActivePiecePosX();
+				int y = boardView.getActivePiecePosY();	
+				Piece p = board.getPieceByXandY(x, y);
+				
+				/* set the state of selected piece as defensive state */
+				p.SetState(p.new DefensiveState());
+				
+				/* show action menu*/
+				backPanel.moveAndShowPieceMenu(x, y);
+				
+				/* update board state*/
+				boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
+			}	
 		});
 
 		
-		this.backPanel.addModelListener("NORMAL MODEL", new ActionListener(){
+		this.backPanel.addModelListener("NORMAL MODE", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					backPanel.setStateMenuInvisible();
@@ -154,23 +170,19 @@ public class BoardController implements ComponentListener{
 				boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
 			}	
 		});
-
-
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 	
 	/**BoardController.setPieces()
-	 * Get positions and jobs of active pieces from model
+	 * Get positions and jobs of pieces from model
 	 * draw images of pieces on the view with it
 	 */
 	private void setPieces(){
     	ArrayList<Piece> pieces = board.getPieces();
-    	
     	for(Piece p: pieces){
     		int x = p.getPosX();
     		int y = p.getPosY();
@@ -183,15 +195,16 @@ public class BoardController implements ComponentListener{
 	 * add ActionListeners to all squares within the board view.
 	 */
 	private void initializeSquareActionListener(){
+		/* get height and width of the board */
 		int d_height = board.getBoardHeight();
 		int d_width = board.getBoardWidth();
-//		System.out.println("initializeSquareActionListener()");
+		
+		/* go through all squares, bind controllers to them*/
 		for(int i = 0; i< d_height; i++){
 			for(int j =0; j< d_width; j++){
 				final int x = i;
 				final int y = j;
 				if(board.isPiece(i, j)){
-//					System.out.println("Piece:" + i + ", " +j);
 					PieceController pc = new PieceController(board.getPieceByXandY(x, y));
 					boardView.getSubComponent(x, y).getSubComponent().addMouseListener(pc);
 					
@@ -199,13 +212,13 @@ public class BoardController implements ComponentListener{
 				
 				SquareController sc = new SquareController(x, y);
 				boardView.getSubComponent(x, y).addMouseListener(sc);
-				
-				//TODO if a square holds something else
 			}
 		}
 	}// End of addSquareActionListener()
 	
-	/* a class implements ActionListener to specify actions to be performed when pieces are clicked.
+	/* ----------------------inner classes begin from the line ----------------------------------------*/
+	
+	/** a class implements ActionListener to specify actions to be performed when pieces are clicked.
 	 * make it inner to get an access to board model as coordinates are required during the procedure.
 	 * */
 	private class PieceController implements MouseListener{
@@ -217,28 +230,36 @@ public class BoardController implements ComponentListener{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-//			System.out.println("invoked!");
-
+			
 			int x = p.getPosX();
 			int y = p.getPosY();
 			
 			if(board.getPieceByXandY(x, y).isMovable()){
-				//keep other pieces from moving in a single round
 				if(boardView.getState()!=PanelState.BOARD_STATE_UNCERTAIN && !boardView.isActivePice(x, y)){
+					/* keep other pieces from moving in a single round 
+					 * if a player has moved a piece in its turn, 
+					 * other pieces are not permitted to move until new turn starts */
 					return;
 				}
 				
 				else{
 					if(boardView.getState() == PanelState.BOARD_STATE_UNCERTAIN){
+						/* if the piece state is not selected , show selection menu*/
 						backPanel.moveAndShowStateMenu(x, y);
-						boardView.setActivePieceCoordinates(x, y);
-						
-//						System.out.println(x+"," +y);
+						/* choose clicked piece*/
+						boardView.setActivePieceCoordinates(x, y);		
+						/* update state*/
 						boardView.setState(PanelState.BOARD_STATE_MENU_SHOWN);
 					}
 					else if(boardView.getState() == PanelState.BOARD_NO_MENU_SHOWN){
+						/* show action menu */
 						backPanel.moveAndShowPieceMenu(x, y);
-						boardView.setActivePieceCoordinates(x, y);
+						
+						//TODO debug
+						boardView.setState(PanelState.BOARD_NO_MENU_SHOWN);
+						
+						/* choose the piece */
+						boardView.setActivePieceCoordinates(x, y);	
 					}
 				}
 			}
@@ -250,9 +271,11 @@ public class BoardController implements ComponentListener{
 						int attackingPiecePosX = boardView.getActivePiecePosX();
 						int attackingPiecePosY = boardView.getActivePiecePosY();
 						
-						//board.attackFromAtoB(attackingPiecePosX, attackingPiecePosY, x, y);
+						// create and execute attack command
 						Command atkCommand = new AttackCommand(board, backPanel,attackingPiecePosX, attackingPiecePosY, x, y);
 						atkCommand.execute();
+						
+						//push executed command into stack (for undo)
 						commStack.pushCommand(atkCommand);
 					}
 				}
@@ -270,8 +293,7 @@ public class BoardController implements ComponentListener{
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+			// TODO Auto-generated method stub	
 		}
 
 		@Override
@@ -290,18 +312,10 @@ public class BoardController implements ComponentListener{
 		}
 	}
 	
-	
-	/**
-	 * Following players' movements, redraw board and pieces
-	 * establish links between squares and specific model
-	 * invoked after turn ends.
-	 * */
-	
-	/* a class implements MouseListener to specify actions to be performed when squares are clicked.
+	/** a class implements MouseListener to specify actions to be performed when squares are clicked.
 	 * make it inner to get an access to board model as coordinates are required during the procedure.
 	 * */
 	private class SquareController implements MouseListener{
-		
 		private int x;
 		private int y;
 		BoardPanel bp = BoardController.this.boardView;
@@ -332,15 +346,21 @@ public class BoardController implements ComponentListener{
 					return;
 				}
 			}else if(boardView.getState() == PanelState.BOARD_STATE_MENU_SHOWN){
+				
+				/* click square to conceal state menu*/
 				backPanel.setPieceStateMenuInvisible();
 				boardView.setState(PanelState.BOARD_STATE_UNCERTAIN);
 				return;
+				
 			}else if(boardView.getState() == PanelState.BOARD_MENU_SHOWN){
+				
+				/* click square to conceal action menu*/
 				backPanel.setPieceMenuInvisible();
 				boardView.setState(PanelState.BOARD_NO_MENU_SHOWN);
 				return;
 			}
 			else if(bp.isBoardPieceChoosen()){
+				/* move selected piece to clicked square */
 				if(boardView.getState() == PanelState.BOARD_WAIT_FOR_MOVE){
 					int pieceX = bp.getActivePiecePosX();
 					int pieceY = bp.getActivePiecePosY();
@@ -348,6 +368,8 @@ public class BoardController implements ComponentListener{
 					if(!boardView.isMovableSquare(x, y)){
 						return;
 					}
+					
+					// create and execute moving command
 					Command moveCom = new MoveCommand(board,backPanel, pieceX, pieceY, x, y);
 					moveCom.execute();
 					commStack.pushCommand(moveCom);
@@ -384,19 +406,22 @@ public class BoardController implements ComponentListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			/* after button clicked, concel action menu */
 			backPanel.setPieceMenuInvisible();
+			
+			/* get selected component*/
 			int x = boardView.getActivePiecePosX();
 			int y = boardView.getActivePiecePosY();
-			
 			BasicPanel square = boardView.getSubComponent(x, y);
 			
+			/* highlight movable area*/
 			if(square.getState() == PanelState.PIECE_NON_CHOSEN){
 				int distance = board.getPieceByXandY(x, y).getMovableDistance();
 				boardView.setChosenPieceMovableArea(x, y, distance);
 				boardView.setState(PanelState.BOARD_WAIT_FOR_MOVE);
 			}
 			else{
+				//error message
 				System.out.println(square.getState().toString());
 			}		
 		}		
@@ -405,18 +430,22 @@ public class BoardController implements ComponentListener{
 	private class PieceAttackButtonController implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			/* after button clicked, action menu get invisible */
 			backPanel.setPieceMenuInvisible();
 			
+			/* get chosen piece */
 			int x = boardView.getActivePiecePosX();
 			int y = boardView.getActivePiecePosY();
 			Piece p = board.getPieceByXandY(x, y);
 			
+			/* highlight attackable area*/
 			SquareComponent attackPiece = DecoratedPieceProducer.generateAttackPiece(p);
 			ArrayList<Coordinate> clist = (ArrayList<Coordinate>) ((AbstractAttackPieceDecorator)attackPiece).getAttackField();
 			
 			for(Coordinate c: clist){
 				boardView.highlightAttackArea(c.getCoordinateX(), c.getCoordinateY());
 			}
+			/* update board state */
 			boardView.setState(PanelState.BOARD_WAITING_FOR_ATTACK);
 		}		
 	}

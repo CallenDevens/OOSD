@@ -8,6 +8,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+/** Component of Composite design pattern */
 public abstract class BasicPanel extends JPanel{
 	
 	protected float transparency;
@@ -49,21 +50,19 @@ public abstract class BasicPanel extends JPanel{
 		return null;
 	}
 	
-	protected void addComponent(BasicPanel panel){
+	public void addComponent(BasicPanel panel){
 		
 	}
 	
-	protected void removeComponent(BasicPanel panel){
+	public void removeComponent(BasicPanel panel){
 		
 	}
 	
-	protected void addComponent(BasicPanel panel, int posX, int posY){
+	public void addComponent(BasicPanel panel, int posX, int posY){
 		
 	}
 	
-	protected void removeComponent(int posX, int posY){
+	public void removeComponent(int posX, int posY){
 		
 	}
-
-
 }

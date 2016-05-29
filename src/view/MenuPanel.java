@@ -10,8 +10,11 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
+/** Composite of composition design pattern 
+ * player Action Menu
+ * show up for player to choose action be performed
+ * optional actions: MOVE, ATTACK, RESIGN, CANCEL */
 public class MenuPanel extends BasicPanel{
 
 	private Map<String, JButton> menuitems = new LinkedHashMap<String,JButton>();
@@ -22,6 +25,7 @@ public class MenuPanel extends BasicPanel{
 	private JButton cancelButton =new JButton("CANCEL");
 	
 	public MenuPanel(){
+		/* place subcomponents */
 		this.setBackground(Color.BLACK);
 		this.setOpaque(false);
 		this.setTransparent((float) 0.7);
@@ -40,12 +44,10 @@ public class MenuPanel extends BasicPanel{
 		this.setSize(100,150);
 		
 		this.cancelButton.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MenuPanel.this.setVisible(false);
 			}
-			
 		});
 	}
 	
@@ -85,7 +87,6 @@ public class MenuPanel extends BasicPanel{
 	public void addAttackButtonListener(ActionListener l) {
 		this.atkButton.addActionListener(l);
 	}
-
 	
 	public void enableMove(){
 	    this.moveButton.setEnabled(true);
@@ -95,13 +96,11 @@ public class MenuPanel extends BasicPanel{
 		this.moveButton.setEnabled(false);
 	}
 
-
 	public void showUpAfterMove(int posX, int posY) {
 		this.setLocation((posY)*50, (posX)*50);	
 		this.setVisible(true);
 		this.repaint();
 	}
-
 
 	public JButton getResignButton() {
 		return this.resignButton;
@@ -112,8 +111,7 @@ public class MenuPanel extends BasicPanel{
 	}
 
 	public void addMenuResignActionListener(ActionListener l) {
-		this.resignButton.addActionListener(l);
-		
+		this.resignButton.addActionListener(l);	
 	}
 
 	@Override
@@ -122,11 +120,8 @@ public class MenuPanel extends BasicPanel{
 		this.setVisible(true);
 		this.repaint();
 	}
-
 	public void addCancelButtonListener(ActionListener l) {
 		this.cancelButton.addActionListener(l);
 		
 	}
-
-
 }

@@ -26,4 +26,15 @@ public class Player {
 	public String getPlayerName(){
 		return name;
 	}
+	
+	public int getUndoCount(){
+		return this.undoCount;
+	}
+	public void setUndoCount(int uc){
+		this.undoCount = uc;
+	}
+	
+	public void setUndoAvailable(boolean ua){
+		this.undoAvailable = ua;
+	}
 }

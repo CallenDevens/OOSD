@@ -1,18 +1,17 @@
 package controller;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import model.Game;
-import utils.GameSetting;
 import view.GameGUI;
 
+/** implements ActionListener, 
+ *  defines tasks to be performed after user clicks load item in game menu */
 public class LoadController implements ActionListener {
-	GameGUI gameGUI;
 	
+	GameGUI gameGUI;
 	public LoadController(GameGUI gui){
 		this.gameGUI = gui;
 	}
@@ -24,9 +23,11 @@ public class LoadController implements ActionListener {
 		if(!file.exists()){
 			return;
 		}
+		/* close window to redraw, for new game may have a board of different size */
+		gameGUI.dispose();
+		
+		/* load save data into game model*/
 		GameSL.loadBoard(game, "GameData.xml");
-		gameGUI.dispose();		
 		StartGame sg = new StartGame(game);
 	}
-
 }
